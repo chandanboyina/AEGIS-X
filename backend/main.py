@@ -1,16 +1,37 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.config import settings
+
+from database.base import Base
+from database.database import engine
+
+import models
+
 from api.routes import health_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Create all database tables
+    Base.metadata.create_all(bind=engine)
+
+    print("✓ Database initialized successfully.")
+    print("✓ AEGIS-X Backend Started.")
+
+    yield
+
+    print("✓ AEGIS-X Backend Shutdown.")
 
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="AEGIS-X Cyber Resilience Platform",
+    lifespan=lifespan,
 )
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,14 +41,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.include_router(health_router)
 
 
-@app.get("/")
+@app.get("/", tags=["Root"])
 def root():
-
     return {
-        "message": "Welcome to AEGIS-X",
+        "application": settings.APP_NAME,
         "version": settings.APP_VERSION,
+        "status": "Running",
+        "message": "Welcome to AEGIS-X Cyber Resilience Platform",
     }
