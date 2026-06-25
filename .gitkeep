@@ -1,0 +1,7 @@
+New-Item architecture\.gitkeep -ItemType File
+New-Item datasets\.gitkeep -ItemType File
+New-Item docker\.gitkeep -ItemType File
+New-Item docs\.gitkeep -ItemType File
+New-Item models\.gitkeep -ItemType File
+New-Item scripts\.gitkeep -ItemType File
+New-Item tests\.gitkeep -ItemType File
