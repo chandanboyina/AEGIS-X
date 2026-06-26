@@ -16,6 +16,7 @@ from api.routes import (
     health_router,
     users_router,
     assets_router,
+    events_router,
 )
 
 
@@ -53,6 +54,8 @@ app.include_router(health_router)
 app.include_router(users_router)
 
 app.include_router(assets_router)
+
+app.include_router(events_router)
 
 
 
