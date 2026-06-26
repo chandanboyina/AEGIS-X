@@ -15,6 +15,7 @@ import models
 from api.routes import (
     health_router,
     users_router,
+    assets_router,
 )
 
 
@@ -50,6 +51,8 @@ app.include_router(health_router)
 
 #milestone 3
 app.include_router(users_router)
+
+app.include_router(assets_router)
 
 
 
