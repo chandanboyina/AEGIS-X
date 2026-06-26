@@ -10,7 +10,12 @@ from database.database import engine
 
 import models
 
-from api.routes import health_router
+#from api.routes import health_router
+
+from api.routes import (
+    health_router,
+    users_router,
+)
 
 
 @asynccontextmanager
@@ -42,6 +47,11 @@ app.add_middleware(
 )
 
 app.include_router(health_router)
+
+#milestone 3
+app.include_router(users_router)
+
+
 
 
 @app.get("/", tags=["Root"])
