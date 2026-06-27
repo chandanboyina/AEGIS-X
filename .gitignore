@@ -64,3 +64,25 @@ Thumbs.db
 # ===========================
 *.tmp
 *.temp
+
+venv/
+__pycache__/
+*.pyc
+
+.env
+
+*.db
+
+node_modules/
+
+dist/
+
+.vscode/
+
+.idea/
+
+.pytest_cache/
+
+.coverage
+
+*.log
