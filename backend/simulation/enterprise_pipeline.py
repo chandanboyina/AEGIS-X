@@ -6,6 +6,7 @@ from simulation.enterprise_stream import EnterpriseEventStream
 from agents.observer.observer_agent import ObserverAgent
 
 from simulation.enterprise_statistics import EnterpriseStatistics
+from agents.oracle.oracle_agent import OracleAgent
 
 
 class EnterprisePipeline:
@@ -33,6 +34,8 @@ class EnterprisePipeline:
         # Observer AI
         # Automatically loads the trained model
         self.observer = ObserverAgent()
+
+        self.oracle = OracleAgent()
 
         self.statistics = EnterpriseStatistics()
 
@@ -74,6 +77,14 @@ class EnterprisePipeline:
         # -----------------------------
 
         packet = self.observer.observe(
+            packet
+        )
+
+        # -----------------------------
+        # Oracle AI
+        # -----------------------------
+
+        packet = self.oracle.investigate(
             packet
         )
 
