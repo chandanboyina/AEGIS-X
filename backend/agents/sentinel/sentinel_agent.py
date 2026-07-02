@@ -86,3 +86,51 @@ class SentinelAgent:
         })
 
         return packet
+    
+    def vote(self, incident):
+
+        response = incident["response"]
+
+        return {
+
+            "agent": "Sentinel",
+
+            "recommendation":
+
+                response["action"],
+
+            "confidence":
+
+                response.get(
+
+                    "confidence",
+
+                    90
+
+                ),
+
+            "weight": 0.15,
+
+            "reason": [
+
+                response["reason"]
+
+            ],
+
+            "evidence": {
+
+                "playbook":
+
+                    response.get(
+
+                        "playbook"
+
+                    )
+
+            },
+
+            "timestamp":
+
+                incident["timestamp"]
+
+        }

@@ -47,3 +47,31 @@ class OracleAgent:
         })
 
         return packet
+    
+    def vote(self, packet):
+
+        oracle = packet["oracle"]
+
+        return {
+
+            "agent": "Oracle",
+
+            "recommendation": oracle["category"],
+
+            "confidence": oracle["investigation_confidence"],
+
+            "weight": 0.20,
+
+            "reason": oracle["reasoning"],
+
+            "evidence": {
+
+                "mitre": oracle["mitre"],
+
+                "severity": oracle["severity"]
+
+            },
+
+            "timestamp": packet["metadata"]["generated_at"]
+
+        }

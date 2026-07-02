@@ -1,91 +1,21 @@
-'''
-class InvestigationSummary:
+from agents.infrastructure.impact_estimator import ImpactEstimator
 
-    def build(self, packet):
-
-        category = packet["oracle"]["category"]
-
-        priority = packet["sentinel"]["priority"]
-
-        risk_scores = {
-            "MEDIUM": 60,
-            "HIGH": 82,
-            "CRITICAL": 96
-        }
-
-        mitre_stage = {
-
-            "Reconnaissance": "Reconnaissance",
-
-            "Credential Access": "Credential Access",
-
-            "Privilege Escalation": "Privilege Escalation",
-
-            "Malware": "Execution",
-
-            "Ransomware": "Impact"
-
-        }
-
-        event = packet["event"]
-
-        # -----------------------------
-        # IOC Count
-        # -----------------------------
-        ioc_count = 2  # Source IP + Asset
-
-        if "ports" in event:
-            ioc_count += len(event["ports"])
-
-        if "process" in event:
-            ioc_count += 1
-
-        if "username" in event:
-            ioc_count += 1
-
-        # -----------------------------
-        # IOC Types
-        # -----------------------------
-        ioc_types = []
-
-        for ioc in incident["ioc_list"]:
-
-            if ioc["type"] not in ioc_types:
-
-                ioc_types.append(
-                    ioc["type"]
-                )
-
-        if "ports" in event:
-            ioc_types.append("Ports")
-
-        if "process" in event:
-            ioc_types.append("Process")
-
-        if "username" in event:
-            ioc_types.append("Username")
-
-        return {
-
-            "risk_score": risk_scores[priority],
-
-            "confidence": "High",
-
-            "mitre_stage": mitre_stage[category],
-
-            "affected_users": 1 if "username" in event else 0,
-
-            "affected_assets": 1,
-
-            "ioc_count": ioc_count,
-
-            "ioc_types": ioc_types
-
-        }
-
-'''
 
 class InvestigationSummary:
+    """
+    Generates the enterprise investigation summary.
+
+    This summary is consumed by:
+    - Commander AI
+    - Business Impact Engine
+    - Enterprise Risk Engine
+    - Threat Hunter
+    - Executive Dashboard
+    """
+
+    def __init__(self):
+
+        self.estimator = ImpactEstimator()
 
     def build(self, incident):
 
@@ -93,11 +23,31 @@ class InvestigationSummary:
 
         priority = incident["severity"]
 
+        # ----------------------------------------
+        # Enterprise Impact Estimation
+        # ----------------------------------------
+
+        impact = self.estimator.estimate(
+            incident
+        )
+
+        # ----------------------------------------
+        # Risk Score
+        # ----------------------------------------
+
         risk_scores = {
+
             "MEDIUM": 60,
+
             "HIGH": 82,
+
             "CRITICAL": 96
+
         }
+
+        # ----------------------------------------
+        # MITRE Stage
+        # ----------------------------------------
 
         mitre_stage = {
 
@@ -113,16 +63,14 @@ class InvestigationSummary:
 
         }
 
-        # -----------------------------
-        # IOC Count
-        # -----------------------------
+        # ----------------------------------------
+        # IOC Statistics
+        # ----------------------------------------
+
         ioc_count = len(
             incident["ioc_list"]
         )
 
-        # -----------------------------
-        # IOC Types
-        # -----------------------------
         ioc_types = []
 
         for ioc in incident["ioc_list"]:
@@ -133,27 +81,51 @@ class InvestigationSummary:
                     ioc["type"]
                 )
 
+        # ----------------------------------------
+        # Investigation Summary
+        # ----------------------------------------
+
         return {
 
             "risk_score":
-                risk_scores[priority],
+
+                risk_scores.get(
+                    priority,
+                    50
+                ),
 
             "confidence":
+
                 "High",
 
             "mitre_stage":
-                mitre_stage[category],
+
+                mitre_stage.get(
+                    category,
+                    "Unknown"
+                ),
 
             "affected_users":
-                1,
+
+                impact["affected_users"],
 
             "affected_assets":
-                1,
+
+                impact["affected_assets"],
 
             "ioc_count":
+
                 ioc_count,
 
             "ioc_types":
-                ioc_types
+
+                ioc_types,
+
+            "estimated_scope":
+
+                (
+                    f"{impact['affected_assets']} assets / "
+                    f"{impact['affected_users']} users"
+                )
 
         }

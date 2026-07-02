@@ -1,0 +1,316 @@
+{
+  "Reconnaissance": [
+    {
+      "id": "PB-010",
+      "name": "Reconnaissance Mitigation",
+      "steps": [
+        "Block scanning IPs",
+        "Enable rate limiting",
+        "Increase IDS sensitivity",
+        "Collect reconnaissance indicators"
+      ],
+      "actions": {
+            "isolate": [
+                "PERIMETER_FIREWALL"
+            ],
+            "protect": [
+                "WEB_PLATFORM",
+                "DNS"
+            ],
+            "block": [
+                "Reconnaissance",
+                "Resource Development"
+            ]
+        }
+    }
+  ],
+
+  "Credential Access": [
+    {
+      "id": "PB-001",
+      "name": "Credential Containment",
+      "steps": [
+        "Disable affected account",
+        "Force password reset",
+        "Revoke active sessions",
+        "Enable MFA validation"
+      ],
+      "actions": {
+            "isolate": [
+                "AUTH",
+                "IAM"
+            ],
+            "protect": [
+                "DATABASE"
+            ],
+            "block": [
+                "Credential Access",
+                "Privilege Escalation"
+            ]
+        }
+    },
+
+    {
+      "id": "PB-014",
+      "name": "Enterprise Credential Response",
+      "steps": [
+        "Isolate affected endpoint",
+        "Block malicious IP",
+        "Snapshot host",
+        "Start forensic collection"
+      ],
+      "actions": {
+            "isolate": [
+                "AUTH",
+                "VPN"
+            ],
+            "protect": [
+                "DATABASE",
+                "EMAIL"
+            ],
+            "block": [
+                "Credential Access",
+                "Credential Dumping",
+                "Privilege Escalation"
+            ]
+        }
+    }
+  ],
+
+  "Privilege Escalation": [
+    {
+      "id": "PB-015",
+      "name": "Privilege Escalation Response",
+      "steps": [
+        "Disable elevated account",
+        "Terminate suspicious processes",
+        "Collect volatile evidence",
+        "Review privilege assignments"
+      ],
+      "actions": {
+            "isolate": [
+                "SERVER"
+            ],
+            "protect": [
+                "IAM",
+                "AUTH"
+            ],
+            "block": [
+                "Privilege Escalation",
+                "Credential Dumping",
+                "Defense Evasion"
+            ]
+        }
+    }
+  ],
+
+  "Lateral Movement": [
+    {
+      "id": "PB-016",
+      "name": "Network Containment",
+      "steps": [
+        "Segment affected subnet",
+        "Block SMB and RDP",
+        "Isolate compromised hosts",
+        "Monitor east-west traffic"
+      ],
+      "actions": {
+            "isolate": [
+                "NETWORK"
+            ],
+            "protect": [
+                "DATABASE",
+                "FILESERVER"
+            ],
+            "block": [
+                "Lateral Movement",
+                "Collection",
+                "Command and Control"
+            ]
+        }
+    }
+  ],
+
+  "Persistence": [
+    {
+      "id": "PB-017",
+      "name": "Persistence Removal",
+      "steps": [
+        "Remove scheduled tasks",
+        "Delete malicious services",
+        "Check registry autoruns",
+        "Verify startup folders"
+      ],
+      "actions": {
+            "isolate": [
+                "SERVER"
+            ],
+            "protect": [
+                "ENDPOINT"
+            ],
+            "block": [
+                "Persistence",
+                "Defense Evasion"
+            ]
+        }
+    }
+  ],
+
+  "Defense Evasion": [
+    {
+      "id": "PB-018",
+      "name": "Defense Recovery",
+      "steps": [
+        "Re-enable security controls",
+        "Validate AV policies",
+        "Restore logging",
+        "Investigate tampering"
+      ],
+      "actions": {
+            "isolate": [
+                "SERVER"
+            ],
+            "protect": [
+                "SIEM",
+                "EDR"
+            ],
+            "block": [
+                "Defense Evasion",
+                "Command and Control"
+            ]
+        }
+    }
+  ],
+
+  "Credential Dumping": [
+    {
+      "id": "PB-019",
+      "name": "Credential Dump Response",
+      "steps": [
+        "Rotate privileged credentials",
+        "Reset Kerberos tickets",
+        "Inspect LSASS access",
+        "Enable memory protection"
+      ],
+      "actions": {
+            "isolate": [
+                "DOMAIN_CONTROLLER"
+            ],
+            "protect": [
+                "LSASS"
+            ],
+            "block": [
+                "Credential Dumping",
+                "Privilege Escalation"
+            ]
+        }
+    }
+  ],
+
+  "Command and Control": [
+    {
+      "id": "PB-020",
+      "name": "Command & Control Isolation",
+      "steps": [
+        "Block outbound traffic",
+        "Sinkhole malicious domains",
+        "Capture network traffic",
+        "Monitor beaconing"
+      ],
+      "actions": {
+            "isolate": [
+                "NETWORK"
+            ],
+            "protect": [
+                "FIREWALL"
+            ],
+            "block": [
+                "Command and Control",
+                "Exfiltration"
+            ]
+        }
+    }
+  ],
+
+  "Malware": [
+    {
+      "id": "PB-021",
+      "name": "Malware Containment",
+      "steps": [
+        "Isolate endpoint",
+        "Kill malicious process",
+        "Collect memory image",
+        "Run enterprise scan"
+      ],
+      "actions": {
+            "isolate": [
+                "ENDPOINT"
+            ],
+            "protect": [
+                "FILESERVER",
+                "DATABASE"
+            ],
+            "block": [
+                "Execution",
+                "Malware",
+                "Command and Control"
+            ]
+        }
+    }
+  ],
+
+  "Ransomware": [
+    {
+      "id": "PB-030",
+      "name": "Ransomware Emergency",
+      "steps": [
+        "Disconnect affected systems",
+        "Disable SMB shares",
+        "Protect backups",
+        "Begin recovery"
+      ],
+      "actions": {
+            "isolate": [
+                "FILESERVER",
+                "BACKUP"
+            ],
+            "protect": [
+                "DATABASE",
+                "EMAIL"
+            ],
+            "block": [
+                "Ransomware",
+                "Impact",
+                "Business Disruption"
+            ]
+        }
+    }
+  ],
+
+  "Business Disruption": [
+    {
+      "id": "PB-040",
+      "name": "Business Continuity",
+      "steps": [
+        "Fail over critical services",
+        "Activate DR site",
+        "Restore backups",
+        "Notify business stakeholders"
+      ],
+      "actions": {
+            "isolate": [
+                "APPLICATION"
+            ],
+            "protect": [
+                "BACKUP",
+                "DATABASE",
+                "FILESERVER"
+            ],
+            "block": [
+                "Impact",
+                "Business Disruption"
+            ]
+        }
+    }
+  ]
+}

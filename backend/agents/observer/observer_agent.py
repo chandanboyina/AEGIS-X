@@ -334,3 +334,36 @@ class ObserverAgent:
         )
 
         return packet
+    
+    def vote(self, packet):
+        """
+        Observer AI vote.
+        """
+
+        observer = packet["observer"]
+
+        return {
+
+            "agent": "Observer",
+
+            "recommendation": observer["decision"],
+
+            "confidence": observer["confidence"],
+
+            "weight": 0.10,
+
+            "reason": observer["reasoning"],
+
+            "evidence": {
+
+                "priority": observer["priority"],
+
+                "threat_category": observer["threat_category"],
+
+                "confidence_level": observer["confidence_level"]
+
+            },
+
+            "timestamp": packet["metadata"]["generated_at"]
+
+        }

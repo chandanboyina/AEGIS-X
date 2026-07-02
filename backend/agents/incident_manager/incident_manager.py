@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from agents.incident_manager.incident_status import IncidentStatus
 from agents.incident_manager.incident_assignment import IncidentAssignment
 from agents.incident_manager.incident_history import IncidentHistory
@@ -25,6 +24,12 @@ from agents.incident_manager.collaboration_engine import CollaborationEngine
 from agents.incident_manager.case_metrics import CaseMetrics
 from agents.incident_manager.ioc_manager import IOCManager
 from agents.incident_manager.incident_repository import IncidentRepository
+from agents.commander.commander_ai import CommanderAI
+from agents.infrastructure.asset_inventory import AssetInventory
+from agents.infrastructure.dependency_graph import EnterpriseDependencyGraph
+from agents.infrastructure.blast_radius import BlastRadius
+
+#from backend.models import incident
 
 
 class IncidentManager:
@@ -84,6 +89,14 @@ class IncidentManager:
 
         self.ioc_manager = IOCManager()
 
+        self.commander = CommanderAI()
+
+        self.asset_inventory = AssetInventory()
+
+        self.dependency_graph = EnterpriseDependencyGraph()
+
+        self.blast_radius = BlastRadius()
+
         
 
     def create(self, packet):
@@ -126,7 +139,10 @@ class IncidentManager:
 
             "history": self.history.build(
                 packet
-            )
+            ),
+
+            "observer_confidence":
+                packet["observer"]["confidence"],
 
         }
 
@@ -135,6 +151,24 @@ class IncidentManager:
         # ----------------------------------------
         incident["next_status"] = self.lifecycle.progress(
             incident
+        )
+
+        incident["asset_profile"] = self.asset_inventory.get(
+
+            incident["asset"]
+
+        )
+
+        #----------------------------------------
+        # Dependency Graph
+        #----------------------------------------
+        dependencies = self.dependency_graph.find_dependencies(incident["asset"])
+
+        incident["blast_radius"] = (
+            self.blast_radius.calculate(
+                incident,
+                dependencies
+            )
         )
 
         # ----------------------------------------
@@ -267,6 +301,18 @@ class IncidentManager:
                 packet,
                 incident
             )
+        )
+        # ----------------------------------------
+        # Commander AI Analysis
+        # ----------------------------------------
+        incident["commander"] = (
+
+            self.commander.analyze(
+
+                incident
+
+            )
+
         )
 
         # ----------------------------------------
