@@ -10410,5 +10410,369 @@
         "false_positive": false,
         "analyst_rating": 10,
         "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:24.678602",
+        "incident_id": "IM-00001",
+        "attack": "Reconnaissance",
+        "asset": "CBSE-APP-01",
+        "severity": "MEDIUM",
+        "playbook": "PB-010-Aggressive",
+        "fingerprint": {
+            "category": "Reconnaissance",
+            "mitre": "T1595",
+            "asset": {
+                "hostname": "CBSE-APP-01",
+                "criticality": "Critical",
+                "department": "Education"
+            },
+            "severity": "MEDIUM"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 5,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:24.858411",
+        "incident_id": "IM-00002",
+        "attack": "Reconnaissance",
+        "asset": "CBSE-DB-01",
+        "severity": "MEDIUM",
+        "playbook": "PB-010-Aggressive",
+        "fingerprint": {
+            "category": "Reconnaissance",
+            "mitre": "T1595",
+            "asset": {
+                "hostname": "CBSE-DB-01",
+                "criticality": "Critical",
+                "department": "Database"
+            },
+            "severity": "MEDIUM"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 2,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:25.099617",
+        "incident_id": "IM-00003",
+        "attack": "Credential Access",
+        "asset": "CBSE-EMAIL-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-EMAIL-01",
+                "criticality": "Medium",
+                "department": "Messaging"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 4,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:25.346609",
+        "incident_id": "IM-00004",
+        "attack": "Credential Access",
+        "asset": "CBSE-APP-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-APP-01",
+                "criticality": "Critical",
+                "department": "Education"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 5,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:25.521571",
+        "incident_id": "IM-00005",
+        "attack": "Credential Access",
+        "asset": "CBSE-FW-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-FW-01",
+                "criticality": "High",
+                "department": "Network"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 8,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:25.670557",
+        "incident_id": "IM-00006",
+        "attack": "Malware",
+        "asset": "CBSE-HR-01",
+        "severity": "CRITICAL",
+        "playbook": "PB-021-Aggressive",
+        "fingerprint": {
+            "category": "Malware",
+            "mitre": "T1059.001",
+            "asset": {
+                "hostname": "CBSE-HR-01",
+                "criticality": "Medium",
+                "department": "Human Resources"
+            },
+            "severity": "CRITICAL"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 1,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T15:54:25.821626",
+        "incident_id": "IM-00007",
+        "attack": "Malware",
+        "asset": "CBSE-VPN-01",
+        "severity": "CRITICAL",
+        "playbook": "PB-021-Aggressive",
+        "fingerprint": {
+            "category": "Malware",
+            "mitre": "T1059.001",
+            "asset": {
+                "hostname": "CBSE-VPN-01",
+                "criticality": "High",
+                "department": "Remote Access"
+            },
+            "severity": "CRITICAL"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 4,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T16:32:43.946279",
+        "incident_id": "IM-00001",
+        "attack": "Credential Access",
+        "asset": "CBSE-BACKUP-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-BACKUP-01",
+                "criticality": "High",
+                "department": "Backup"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 1,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T17:40:20.105588",
+        "incident_id": "IM-00001",
+        "attack": "Reconnaissance",
+        "asset": "CBSE-HR-01",
+        "severity": "MEDIUM",
+        "playbook": "PB-010-Aggressive",
+        "fingerprint": {
+            "category": "Reconnaissance",
+            "mitre": "T1595",
+            "asset": {
+                "hostname": "CBSE-HR-01",
+                "criticality": "Medium",
+                "department": "Human Resources"
+            },
+            "severity": "MEDIUM"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": false,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 1,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 7,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T17:40:45.361774",
+        "incident_id": "IM-00001",
+        "attack": "Credential Access",
+        "asset": "CBSE-VPN-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-VPN-01",
+                "criticality": "High",
+                "department": "Remote Access"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 4,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T17:57:24.693666",
+        "incident_id": "IM-00001",
+        "attack": "Credential Access",
+        "asset": "CBSE-EMAIL-01",
+        "severity": "HIGH",
+        "playbook": "PB-001-Aggressive",
+        "fingerprint": {
+            "category": "Credential Access",
+            "mitre": "T1110",
+            "asset": {
+                "hostname": "CBSE-EMAIL-01",
+                "criticality": "Medium",
+                "department": "Messaging"
+            },
+            "severity": "HIGH"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 4,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T17:57:35.873332",
+        "incident_id": "IM-00001",
+        "attack": "Reconnaissance",
+        "asset": "CBSE-FW-01",
+        "severity": "MEDIUM",
+        "playbook": "PB-010-Aggressive",
+        "fingerprint": {
+            "category": "Reconnaissance",
+            "mitre": "T1595",
+            "asset": {
+                "hostname": "CBSE-FW-01",
+                "criticality": "High",
+                "department": "Network"
+            },
+            "severity": "MEDIUM"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": true,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 8,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 10,
+        "notes": "Automatic simulation"
+    },
+    {
+        "timestamp": "2026-07-09T18:22:29.860256",
+        "incident_id": "IM-00001",
+        "attack": "Reconnaissance",
+        "asset": "CBSE-DC-01",
+        "severity": "MEDIUM",
+        "playbook": "PB-010-Aggressive",
+        "fingerprint": {
+            "category": "Reconnaissance",
+            "mitre": "T1595",
+            "asset": {
+                "hostname": "CBSE-DC-01",
+                "criticality": "Critical",
+                "department": "Identity"
+            },
+            "severity": "MEDIUM"
+        },
+        "recovery_minutes": 5,
+        "business_loss": 0.05,
+        "success": false,
+        "services_saved": 2,
+        "services_lost": 0,
+        "blast_radius_before": 4,
+        "blast_radius_after": 0,
+        "false_positive": false,
+        "analyst_rating": 7,
+        "notes": "Automatic simulation"
     }
 ]

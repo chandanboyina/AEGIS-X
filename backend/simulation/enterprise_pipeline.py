@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ai.evidence.evidence_builder import EvidenceBuilder
 from ai.context.context_engine import ContextEngine
 from ai.behavior.feature_engine import FeatureEngine
@@ -26,6 +28,8 @@ from agents.sentinel.sentinel_agent import SentinelAgent
 
 from agents.ueba.current_activity_builder import CurrentActivityBuilder
 
+from agents.incident_manager.incident_manager import IncidentManager
+
 
 class EnterprisePipeline:
     """
@@ -53,25 +57,23 @@ class EnterprisePipeline:
         # Automatically loads the trained model
         self.observer = ObserverAgent()
 
-        self.oracle = OracleAgent()
-
         self.statistics = EnterpriseStatistics()
 
         self.behavior = AIBehaviorEngine()
 
         self.correlation = EnterpriseIntelligenceBuilder()
 
-        self.brain = EnterpriseCyberBrain()
+        self.activity = CurrentActivityBuilder()
 
-        self.cyber_dna = CyberDNA()
+        self.incident_manager = IncidentManager()
 
         self.commander = CommanderAI()
 
-        self.council = DebateEngine()
+        self.digital_twin = CyberDigitalTwin()
 
-        self.sentinel = SentinelAgent()
+        self.brain = EnterpriseCyberBrain()
 
-        self.activity = CurrentActivityBuilder()
+        self.cyber_dna = CyberDNA()
 
     def process_event(self, event, snapshot):
 
@@ -131,51 +133,94 @@ class EnterprisePipeline:
             [packet]
         )
 
+        packet = self.incident_manager.process(
+            packet
+        )
+
+        if not packet.get("completed"):
+            return packet
+
         # -----------------------------
         # Enterprise Brain
         # -----------------------------
 
+        packet["enterprise_ai"] = {
+
+            "brain": {
+
+                "history": self.brain.attack_history(
+                    packet["asset"]["hostname"]
+                ),
+
+                "similar": self.brain.find_similar(packet)
+
+            },
+
+            "cyber_dna": self.cyber_dna.build(packet),
+
+            "digital_twin": self.digital_twin.simulate(packet)
+
+        }
+
+
+        packet["trace"] = [
+
+            "Evidence",
+
+            "Context",
+
+            "Features",
+
+            "Observer",
+
+            "Behavior",
+
+            "Correlation",
+
+            "Incident Manager",
+
+            "Oracle",
+
+            "Sentinel",
+
+            "Commander",
+
+            "AI Council",
+
+            "Enterprise Brain",
+
+            "Cyber DNA",
+
+            "Digital Twin"
+
+        ]
+
+        packet["pipeline"] = {
+
+            "name": "Enterprise AI Pipeline",
+
+            "version": "AEGIS-X 1.0",
+
+            "status": "Completed",
+
+            "completed_at": datetime.now().isoformat(),
+
+            "modules": packet["trace"]
+
+        }
+
+        packet["enterprise"] = {
+
+            "pipeline": "AEGIS-X",
+
+            "mode": "Live",
+
+            "completed": True
+
+        }
+
         
-
-        #packet["brain"] = {
-
-        #    "history":
-
-        #        self.brain.attack_history(
-
-        #            packet["asset"]["hostname"]
-
-        #        ),
-        #    "similar":
-
-        #        self.brain.find_similar(
-
-        #            packet
-
-        #        )
-        #}
-
-        # -----------------------------
-        # Cyber DNA
-        # -----------------------------
-
-        #packet["cyber_dna"] = self.cyber_dna.build(
-        #    packet
-        #)
-
-
-        # -----------------------------
-        # Oracle AI
-        # -----------------------------
-
-        #
-        # Oracle AI will execute later,
-        # after all enterprise intelligence
-        # has been generated.
-        #
-
-        #self.brain.remember(packet)
-
+        
         return packet
     def run(self):
 

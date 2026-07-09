@@ -119,6 +119,61 @@ class IncidentManager:
         self.cyber_dna = CyberDNA()
 
         
+    def process(self, packet):
+        """
+        Complete enterprise incident processing pipeline.
+
+        Observer
+            ↓
+        Oracle
+            ↓
+        Sentinel
+            ↓
+        Incident Builder
+            ↓
+        Commander
+            ↓
+        AI Council
+            ↓
+        Enterprise Learning
+        """
+
+        # -----------------------------
+        # Oracle AI
+        # -----------------------------
+        packet = self.oracle.investigate(packet)
+
+        print()
+        print("ORACLE CATEGORY")
+        print(packet["oracle"]["category"])
+        print()
+
+        if packet["oracle"]["category"] == "Normal":
+            print("RETURNING EARLY")
+            return packet
+
+        print("GOING TO SENTINEL")
+
+        # Ignore benign events
+        if packet["oracle"]["category"] == "Normal":
+
+            packet["completed"] = False
+
+            return packet
+
+        # -----------------------------
+        # Sentinel AI
+        # -----------------------------
+        packet = self.sentinel.respond(packet)
+
+        # -----------------------------
+        # Incident Creation
+        # -----------------------------
+        packet = self.create(packet)
+
+        packet["completed"] = True
+
+        return packet
 
     def create(self, packet):
 
@@ -516,3 +571,5 @@ class IncidentManager:
 
     
         return packet
+    
+    
