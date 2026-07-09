@@ -2,29 +2,51 @@ import random
 
 
 class SLATracker:
+    """
+    Enterprise SLA Tracker.
+    """
 
     def build(self, packet, incident):
 
-        priority = packet["sentinel"]["priority"]
+        #
+        # Normalize priority
+        #
+
+        priority = (
+
+            packet["sentinel"]["priority"]
+
+            .upper()
+
+        )
 
         targets = {
 
-            "CRITICAL": 15,
-
-            "HIGH": 30,
+            "LOW": 120,
 
             "MEDIUM": 60,
 
-            "LOW": 120
+            "HIGH": 30,
+
+            "CRITICAL": 15
 
         }
 
-        target = targets[priority]
+        target = targets.get(
 
-        # Occasionally exceed SLA
+            priority,
+
+            60
+
+        )
+
+        #
+        # Simulate elapsed time
+        #
+
         elapsed = random.randint(
 
-            target - 5,
+            max(target - 5, 1),
 
             target + 15
 
@@ -54,20 +76,12 @@ class SLATracker:
 
             "priority": priority,
 
-            "target":
+            "target": f"{target} min",
 
-                f"{target} min",
+            "elapsed": f"{elapsed} min",
 
-            "elapsed":
+            "remaining": f"{remaining} min",
 
-                f"{elapsed} min",
-
-            "remaining":
-
-                f"{remaining} min",
-
-            "status":
-
-                status
+            "status": status
 
         }

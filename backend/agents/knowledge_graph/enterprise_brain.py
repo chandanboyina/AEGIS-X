@@ -6,6 +6,13 @@ from agents.knowledge_graph.similarity_engine import SimilarityEngine
 from agents.knowledge_graph.graph_query import GraphQuery
 from agents.knowledge_graph.outcome_memory import OutcomeMemory
 from agents.commander.playbook_ranker import PlaybookRanker
+from agents.rag.rag_engine import RAGEngine
+from agents.rag.intelligence_score import IntelligenceScore
+from agents.correlation.threat_correlation import ThreatCorrelation
+from agents.council.models.agent_proposal import AgentProposal
+from agents.knowledge_graph.playbook_repository import PlaybookRepository
+
+
 
 
 class EnterpriseCyberBrain:
@@ -27,11 +34,21 @@ class EnterpriseCyberBrain:
 
         self.outcomes = OutcomeMemory()
 
-        
+        self.intelligence_score = IntelligenceScore()    
 
         with open("data/playbooks.json", "r") as f: self.playbooks = json.load(f)
 
         self.ranker = PlaybookRanker()
+
+        self.rag = RAGEngine()
+
+        self.correlation = ThreatCorrelation()
+
+        self.repo=PlaybookRepository()
+
+
+
+        
 
     # ----------------------------------
     # Memory
@@ -94,9 +111,10 @@ class EnterpriseCyberBrain:
 
         recommendation = self.recommend_playbook(incident)
 
-        templates = self.playbooks.get(
-            incident["category"],
-            []
+        repo = PlaybookRepository()
+
+        templates = repo.candidates(
+            incident["category"]
         )
 
         if recommendation:
@@ -105,7 +123,37 @@ class EnterpriseCyberBrain:
 
             for pb in templates:
 
-                if pb["id"] == best["playbook"]:
+                if pb["base_playbook"] == best["playbook"]:
+
+                    rag = self.rag.analyze(
+                        incident,
+                        pb["base_playbook"]
+                    )
+
+                    correlation = incident.get(
+                        "intelligence",
+                        {}
+                    ).get(
+                        "threat",
+                        {
+                            "score":0,
+                            "intelligence":{}
+                        }
+                    )
+
+                    intel_score = self.intelligence_score.score(
+                        pb["playbook"],
+                        rag
+                    )
+
+                    intel_score += int(
+                        correlation["score"] * 0.20
+                    )
+
+                    intel_score = min(
+                        intel_score,
+                        100
+                    )
 
                     return {
 
@@ -115,11 +163,38 @@ class EnterpriseCyberBrain:
 
                         "ranking": recommendation["ranking"],
 
-                        "reason": best["matched_using"]
+                        "reason": best["matched_using"],
+
+                        "intelligence": rag,
+
+                        "correlation": correlation,
+
+                        "intelligence_score": intel_score,
 
                     }
 
         if templates:
+
+            rag = self.rag.analyze(
+                incident,
+                templates[0]["playbook"]["id"]
+            )
+
+            intel_score = self.intelligence_score.score(
+                templates[0]["playbook"],
+                rag
+            )
+
+            correlation = incident.get(
+                "intelligence",
+                {}
+            ).get(
+                "threat",
+                {
+                    "score":0,
+                    "intelligence":{}
+                }
+            )
 
             return {
 
@@ -131,7 +206,52 @@ class EnterpriseCyberBrain:
 
                 "learning_mode": True,
 
+                "intelligence": rag,
+
+                "correlation": correlation,
+
+                "intelligence_score": intel_score,
+
             }
+        
+        generic = {
+
+            "id": "PB-000",
+            "name": "Generic Incident Response",
+            "steps": [
+                "Collect evidence",
+                "Contain affected asset",
+                "Preserve forensic artifacts",
+                "Notify SOC analyst"
+            ],
+
+            "actions": {
+                "isolate": [],
+                "protect": [],
+                "block": []
+            }
+        }
+
+        rag = self.rag.analyze(
+            incident,
+            generic["id"]
+        )
+
+        correlation = incident.get(
+                "intelligence",
+                {}
+            ).get(
+                "threat",
+                {
+                    "score":0,
+                    "intelligence":{}
+                }
+            )
+
+        intel_score = self.intelligence_score.score(
+            generic,
+            rag
+        )
 
         return {
 
@@ -164,7 +284,10 @@ class EnterpriseCyberBrain:
             },
             "history": None,
             "ranking": [],
-            "learning_mode": True
+            "learning_mode": True,
+            "intelligence": rag,
+            "correlation": correlation,
+            "intelligence_score": intel_score,
 
         }
         
@@ -206,11 +329,12 @@ class EnterpriseCyberBrain:
                 []
             )
         )
-        print(
-            brain.get_playbook_templates(
-                incident
-            )
-        )
+        
+        #print(
+        #    brain.get_playbook_templates(
+        #        incident
+        #    )
+        #)
     #-----------------------------------
     #Experience
     #-----------------------------------
@@ -234,10 +358,10 @@ class EnterpriseCyberBrain:
         false_positive=False,
     ):
         
-        print("\n========== BRAIN ==========")
-        print("learn_outcome() called")
-        print("Playbook:", playbook)
-        print("===========================\n")
+        #print("\n========== BRAIN ==========")
+        #print("learn_outcome() called")
+        #print("Playbook:", playbook)
+        #print("===========================\n")
 
         self.outcomes.learn(
 
@@ -423,6 +547,139 @@ class EnterpriseCyberBrain:
             incident
         )
     
+
+    def evaluate(
+        self,
+        incident
+    ):
+        """
+        Evaluate every candidate playbook and
+        return AgentProposal objects.
+        """
+
+        repo=PlaybookRepository()
+
+        templates = repo.candidates(
+            incident["category"]
+        )
+
+        recommendation = self.recommend_playbook(
+            incident
+        )
+
+        historical = {}
+
+        if recommendation:
+
+            for item in recommendation.get(
+                "ranking",
+                []
+            ):
+
+                playbook = item["playbook"]
+
+                if isinstance(playbook, dict):
+                    playbook = playbook["id"]
+
+                historical[playbook] = item
+
+        proposals = []
+
+        for pb in templates:
+
+            history = historical.get(pb["base_playbook"])
+
+            metrics = pb["metrics"]
+
+            if history:
+
+                historical_score = round(
+                    history["overall_score"]
+                )
+
+                score = round(
+                    historical_score * 0.60 +
+                    metrics["historical_success"] * 0.40
+                )
+
+                confidence = score
+                reasoning = list(
+                    history.get(
+                        "reasoning",
+                        [
+                            "No historical reasoning available."
+                        ]
+                    )
+                )
+
+                reasoning.append(
+
+                    f"Strategy: {pb['strategy']}"
+
+                )
+
+                objective = "Historical Success"
+
+            else:
+
+                score = round(
+
+                    metrics["historical_success"] * 0.80
+
+                )
+
+                confidence = score
+
+                reasoning = [
+
+                    "No historical evidence available.",
+
+                    f"Using {pb['strategy']} strategy profile."
+
+                ]
+
+                objective = "Learning Mode"
+
+            proposals.append(
+
+                AgentProposal(
+
+                    agent="Enterprise Brain",
+
+                    playbook=pb["candidate_id"],
+
+                    score=score,
+
+                    confidence=confidence,
+
+                    objective=objective,
+
+                    strengths=[
+
+                        "Historical learning"
+
+                    ],
+
+                    weaknesses=[],
+
+                    evidence=history or {},
+
+                    reasoning=reasoning
+
+                )
+
+            )
+
+        proposals.sort(
+
+            key=lambda x: x.score,
+
+            reverse=True
+
+        )
+
+        return proposals
+    
     def vote(self, incident):
         """
         Enterprise Brain AI Vote
@@ -431,7 +688,15 @@ class EnterpriseCyberBrain:
         fixed confidence values.
         """
 
-        playbook = self.get_playbook(incident)
+        proposals = self.evaluate(
+            incident
+        )
+
+        best = proposals[0]
+
+        playbook = self.get_playbook(
+            incident
+        )
 
         timestamp = incident.get(
             "timestamp",
@@ -482,7 +747,7 @@ class EnterpriseCyberBrain:
 
                 "agent": "Enterprise Brain",
 
-                "recommendation": recommendation["id"],
+                "recommendation": recommendation["candidate_id"],
 
                 "confidence": confidence,
 
@@ -553,6 +818,46 @@ class EnterpriseCyberBrain:
             )
         )
 
+        # ---------------------------------
+        # Intelligence Adjustment
+        # ---------------------------------
+
+        intel_score = playbook.get(
+            "intelligence_score",
+            0
+        )
+
+        correlation = playbook.get(
+            "correlation",
+            {}
+        )
+
+        correlation_score = correlation.get(
+            "score",
+            0
+        )
+
+        # Blend historical confidence with
+        # live intelligence.
+
+        confidence = round(
+
+            confidence * 0.75 +
+
+            intel_score * 0.15 +
+
+            correlation_score * 0.10
+
+        )
+
+        confidence = max(
+            35,
+            min(
+                confidence,
+                99
+            )
+        )
+
         reasoning = list(
             history["reasoning"]
         )
@@ -575,11 +880,23 @@ class EnterpriseCyberBrain:
 
         )
 
+        reasoning.append(
+
+            f"Threat correlation score {correlation_score}/100."
+
+        )
+
+        reasoning.append(
+
+            f"Threat intelligence score {intel_score}/100."
+
+        )
+
         return {
 
             "agent": "Enterprise Brain",
 
-            "recommendation": recommendation["id"],
+            "recommendation": recommendation["candidate_id"],
 
             "confidence": confidence,
 
@@ -603,7 +920,13 @@ class EnterpriseCyberBrain:
 
             },
 
-            "timestamp": timestamp
+            "timestamp": timestamp,
+
+            "evaluation": proposals,
+
+            "proposal": best,
+
+            "alternatives": proposals[1:4],
 
         }
     

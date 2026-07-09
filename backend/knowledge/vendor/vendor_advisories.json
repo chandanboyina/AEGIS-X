@@ -1,0 +1,24 @@
+[
+    {
+        "id": "MS-2024-001",
+        "vendor": "Microsoft",
+        "product": "Windows Server",
+        "mitre": "T1003",
+        "cve": "CVE-2024-12345",
+        "severity": "Critical",
+        "title": "Windows Server Privilege Escalation",
+        "patch": "KB5039999",
+        "recommendation": "Install KB5039999 immediately."
+    },
+    {
+        "id": "CSCO-2024-001",
+        "vendor": "Cisco",
+        "product": "ASA Firewall",
+        "mitre": "T1190",
+        "cve": "CVE-2024-56789",
+        "severity": "High",
+        "title": "Cisco ASA Remote Code Execution",
+        "patch": "ASA 9.18.3",
+        "recommendation": "Upgrade firewall firmware."
+    }
+]

@@ -8,6 +8,21 @@ class OracleDecision:
 
     def decide(self, investigation):
 
+        overall_risk = investigation.get(
+            "overall_risk",
+            0
+        )
+
+        priority = investigation.get(
+            "priority",
+            "P4"
+        )
+
+        recommended = investigation.get(
+            "recommended_action",
+            "Monitor"
+        )
+
         category = investigation["category"]
 
         if category == "Normal":
@@ -29,14 +44,19 @@ class OracleDecision:
 
             return {
 
-                "priority": "P3",
+                "priority": priority,
 
-                "status": "OPEN",
+                "status": "OPEN" if overall_risk >= 50 else "CLOSED",
 
-                "confidence": 85,
+                "confidence": min(
+                    95,
+                    max(
+                        50,
+                        overall_risk
+                    )
+                ),
 
-                "recommendation":
-                    "Block scanning source and increase monitoring."
+                "recommendation": recommended
 
             }
 

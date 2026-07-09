@@ -6,7 +6,7 @@ class TopologyBuilder:
 
     def build(self, incident):
 
-        asset = incident["asset"]
+        asset = incident["asset"]["hostname"]
 
         topology = {
 

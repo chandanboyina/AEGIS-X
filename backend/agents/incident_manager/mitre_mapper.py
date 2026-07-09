@@ -64,18 +64,30 @@ class MitreMapper:
 
         category = packet["oracle"]["category"]
 
-        return self.mapping.get(
+        mitre = self.mapping.get(
 
             category,
 
             {
 
-                "tactic": "Unknown",
+                "tactic":"Unknown",
 
-                "technique": "Unknown",
+                "technique":"Unknown",
 
-                "id": "N/A"
+                "id":"N/A"
 
             }
 
         )
+
+        mitre["reasoning"]=[
+
+            f"Tactic: {mitre['tactic']}.",
+
+            f"Technique: {mitre['technique']}.",
+
+            f"MITRE ID: {mitre['id']}."
+
+        ]
+
+        return mitre

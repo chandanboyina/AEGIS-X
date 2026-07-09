@@ -15,7 +15,7 @@ class HuntReport:
                     incident["incident_id"],
 
                 "asset":
-                    incident["asset"],
+                    incident["asset"]["hostname"],
 
                 "category":
                     incident["category"],

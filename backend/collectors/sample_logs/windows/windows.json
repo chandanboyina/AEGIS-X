@@ -1,0 +1,22 @@
+[
+    {
+        "timestamp": "2026-07-03T10:15:00Z",
+        "asset": "DC-01",
+        "user": "Administrator",
+        "source_ip": "10.0.0.15",
+        "destination_ip": "10.0.0.1",
+        "event": "Failed Logon",
+        "event_id": 4625,
+        "severity": "HIGH"
+    },
+    {
+        "timestamp": "2026-07-03T10:17:30Z",
+        "asset": "WEB-01",
+        "user": "SYSTEM",
+        "source_ip": "10.0.0.20",
+        "destination_ip": "10.0.0.30",
+        "event": "PowerShell Execution",
+        "event_id": 4104,
+        "severity": "CRITICAL"
+    }
+]

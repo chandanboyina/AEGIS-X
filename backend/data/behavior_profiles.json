@@ -1,0 +1,671 @@
+{
+    "users": {
+        "unknown": {
+            "events": 1336,
+            "powershell": 360,
+            "dns": 420,
+            "security": 156,
+            "defender": 400,
+            "hosts": [
+                "LAPTOP-EJCUMHRK",
+                "localhost"
+            ],
+            "mitre": [
+                "T1068",
+                "T1059.001",
+                "T1071.004"
+            ]
+        },
+        "system": {
+            "events": 43,
+            "powershell": 0,
+            "dns": 0,
+            "security": 43,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1078",
+                "T1068"
+            ]
+        },
+        "hp": {
+            "events": 74,
+            "powershell": 0,
+            "dns": 0,
+            "security": 74,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ]
+        },
+        "guest": {
+            "events": 41,
+            "powershell": 0,
+            "dns": 0,
+            "security": 41,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ]
+        },
+        "defaultaccount": {
+            "events": 40,
+            "powershell": 0,
+            "dns": 0,
+            "security": 40,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ]
+        },
+        "administrator": {
+            "events": 40,
+            "powershell": 0,
+            "dns": 0,
+            "security": 40,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ]
+        },
+        "laptop-ejcumhrk\\hp": {
+            "events": 60,
+            "powershell": 60,
+            "dns": 0,
+            "security": 0,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ]
+        },
+        "laptop-ejcumhrk$": {
+            "events": 22,
+            "powershell": 0,
+            "dns": 0,
+            "security": 22,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": []
+        },
+        "administrators": {
+            "events": 4,
+            "powershell": 0,
+            "dns": 0,
+            "security": 4,
+            "defender": 0,
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ]
+        }
+    },
+    "hosts": {
+        "LAPTOP-EJCUMHRK": {
+            "events": 1800,
+            "users": [
+                "system",
+                "hp",
+                "guest",
+                "defaultaccount",
+                "administrator",
+                "laptop-ejcumhrk$",
+                "laptop-ejcumhrk\\hp",
+                "unknown",
+                "administrators"
+            ],
+            "powershell": 600,
+            "dns": 600,
+            "security": 600,
+            "defender": 0,
+            "mitre": [
+                "T1068",
+                "T1078",
+                "T1069",
+                "T1059.001",
+                "T1071.004"
+            ]
+        },
+        "localhost": {
+            "events": 600,
+            "users": [
+                "unknown"
+            ],
+            "powershell": 0,
+            "dns": 0,
+            "security": 0,
+            "defender": 600,
+            "mitre": []
+        }
+    },
+    "processes": {
+        "special privileges assigned": {
+            "events": 24,
+            "users": [
+                "system"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1068"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "successful logon": {
+            "events": 24,
+            "users": [
+                "system"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1078"
+            ],
+            "powershell": false,
+            "network": 24,
+            "dns": 0
+        },
+        "user group enumeration": {
+            "events": 186,
+            "users": [
+                "hp",
+                "guest",
+                "defaultaccount",
+                "administrator"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "windows security": {
+            "events": 362,
+            "users": [
+                "hp",
+                "laptop-ejcumhrk$"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "microsoft-windows-windows defender": {
+            "events": 576,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "localhost"
+            ],
+            "mitre": [],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "scan started": {
+            "events": 21,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "localhost"
+            ],
+            "mitre": [],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "scan completed": {
+            "events": 3,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "localhost"
+            ],
+            "mitre": [],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        },
+        "powershell engine error": {
+            "events": 132,
+            "users": [
+                "laptop-ejcumhrk\\hp"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "powershell engine stop": {
+            "events": 144,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "powershell provider lifecycle": {
+            "events": 153,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "powershell engine start": {
+            "events": 144,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "script block logging": {
+            "events": 12,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "module logging": {
+            "events": 15,
+            "users": [
+                "laptop-ejcumhrk\\hp"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1059.001"
+            ],
+            "powershell": true,
+            "network": 0,
+            "dns": 0
+        },
+        "unknown": {
+            "events": 200,
+            "users": [],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1071.004"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 200
+        },
+        "dns query": {
+            "events": 40,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1071.004"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 40
+        },
+        "microsoft-windows-dns-client": {
+            "events": 327,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [],
+            "powershell": false,
+            "network": 0,
+            "dns": 327
+        },
+        "dns response": {
+            "events": 33,
+            "users": [
+                "unknown"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1071.004"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 33
+        },
+        "local group enumeration": {
+            "events": 4,
+            "users": [
+                "administrators"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK"
+            ],
+            "mitre": [
+                "T1069"
+            ],
+            "powershell": false,
+            "network": 0,
+            "dns": 0
+        }
+    },
+    "devices": {
+        "LAPTOP-EJCUMHRK": {
+            "events": 2400,
+            "powershell": 800,
+            "dns": 800,
+            "security": 800,
+            "defender": 0,
+            "users": [
+                "hp",
+                "guest",
+                "defaultaccount",
+                "administrator",
+                "system",
+                "laptop-ejcumhrk$",
+                "laptop-ejcumhrk\\hp",
+                "unknown",
+                "administrators"
+            ],
+            "sources": [
+                "windows security",
+                "powershell",
+                "dns"
+            ],
+            "mitre": [
+                "T1069",
+                "T1068",
+                "T1078",
+                "T1059.001",
+                "T1071.004"
+            ],
+            "risk": 58025,
+            "average_risk": 24.18
+        },
+        "localhost": {
+            "events": 800,
+            "powershell": 0,
+            "dns": 0,
+            "security": 0,
+            "defender": 800,
+            "users": [
+                "unknown"
+            ],
+            "sources": [
+                "windows defender"
+            ],
+            "mitre": [],
+            "risk": 23360,
+            "average_risk": 29.2
+        }
+    },
+    "networks": {
+        "LAPTOP-EJCUMHRK": {
+            "connections": 2400,
+            "source_ips": [
+                "-"
+            ],
+            "destination_ips": [],
+            "ports": {},
+            "protocols": {},
+            "dns_queries": 800,
+            "powershell_network": 800,
+            "risk": 58080,
+            "average_risk": 24.2,
+            "mitre": [
+                "T1069",
+                "T1059.001",
+                "T1071.004",
+                "T1068",
+                "T1078"
+            ]
+        },
+        "localhost": {
+            "connections": 800,
+            "source_ips": [],
+            "destination_ips": [],
+            "ports": {},
+            "protocols": {},
+            "dns_queries": 0,
+            "powershell_network": 0,
+            "risk": 23360,
+            "average_risk": 29.2,
+            "mitre": []
+        }
+    },
+    "time_profiles": {
+        "LAPTOP-EJCUMHRK": {
+            "hours": {
+                "16": 587,
+                "12": 60,
+                "4": 108,
+                "19": 896,
+                "9": 156,
+                "15": 48,
+                "10": 108,
+                "18": 24,
+                "17": 273,
+                "8": 36,
+                "5": 68,
+                "11": 24,
+                "13": 12
+            },
+            "weekdays": {
+                "Tuesday": 1660,
+                "Sunday": 152,
+                "Saturday": 180,
+                "Thursday": 232,
+                "Wednesday": 72,
+                "Monday": 44,
+                "Friday": 60
+            },
+            "powershell": {
+                "12": 60,
+                "4": 108,
+                "19": 96,
+                "9": 156,
+                "15": 48,
+                "10": 108,
+                "18": 24,
+                "17": 36,
+                "8": 36,
+                "5": 68,
+                "11": 24,
+                "13": 12,
+                "16": 24
+            },
+            "dns": {
+                "16": 200,
+                "17": 200,
+                "19": 400
+            },
+            "security": {
+                "16": 363,
+                "17": 37,
+                "19": 400
+            },
+            "mitre": {
+                "T1068": 30,
+                "T1078": 30,
+                "T1069": 363,
+                "T1059.001": 800,
+                "T1071.004": 158
+            },
+            "risk": {
+                "16": 16690,
+                "12": 1380,
+                "4": 2520,
+                "19": 23125,
+                "9": 2400,
+                "15": 1200,
+                "10": 1800,
+                "18": 240,
+                "17": 6660,
+                "8": 720,
+                "5": 920,
+                "11": 240,
+                "13": 120
+            }
+        },
+        "localhost": {
+            "hours": {
+                "16": 62,
+                "15": 48,
+                "14": 50,
+                "13": 42,
+                "12": 36,
+                "11": 52,
+                "10": 28,
+                "9": 36,
+                "8": 40,
+                "7": 52,
+                "6": 52,
+                "5": 44,
+                "4": 96,
+                "3": 28,
+                "18": 48,
+                "17": 38,
+                "19": 32,
+                "23": 8,
+                "20": 8
+            },
+            "weekdays": {
+                "Tuesday": 176,
+                "Monday": 128,
+                "Sunday": 236,
+                "Saturday": 180,
+                "Friday": 80
+            },
+            "powershell": {},
+            "dns": {},
+            "security": {},
+            "mitre": {},
+            "risk": {
+                "16": 1780,
+                "15": 1440,
+                "14": 1420,
+                "13": 1180,
+                "12": 1000,
+                "11": 1480,
+                "10": 760,
+                "9": 1080,
+                "8": 1200,
+                "7": 1560,
+                "6": 1400,
+                "5": 1320,
+                "4": 2880,
+                "3": 840,
+                "18": 1440,
+                "17": 1140,
+                "19": 960,
+                "23": 240,
+                "20": 240
+            }
+        }
+    },
+    "peer_groups": {
+        "Workstations": {
+            "events": 3200,
+            "powershell": 800,
+            "dns": 800,
+            "security": 800,
+            "risk": 81830,
+            "average_risk": 25.57,
+            "users": [
+                "system",
+                "hp",
+                "guest",
+                "defaultaccount",
+                "administrator",
+                "administrators",
+                "laptop-ejcumhrk$",
+                "unknown",
+                "laptop-ejcumhrk\\hp"
+            ],
+            "hosts": [
+                "LAPTOP-EJCUMHRK",
+                "localhost"
+            ],
+            "mitre": [
+                "T1068",
+                "T1078",
+                "T1069",
+                "T1059.001",
+                "T1071.004"
+            ]
+        }
+    }
+}

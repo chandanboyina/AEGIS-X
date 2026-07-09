@@ -23,8 +23,10 @@ class IncidentMemory:
 
         self.memory.append(incident)
 
+        hostname = incident["asset"]["hostname"]
+
         self.by_asset[
-            incident["asset"]
+            hostname
         ].append(incident)
 
         username = incident.get(

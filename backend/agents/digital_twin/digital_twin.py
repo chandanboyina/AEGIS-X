@@ -7,6 +7,7 @@ from agents.digital_twin.twin_report import TwinReport
 from core.brain_service import brain
 from agents.commander.playbook_simulator import PlaybookSimulator
 #from agents.forecasting.business.business_impact import BusinessImpact
+from agents.digital_twin.digital_twin_vote import DigitalTwinVote
 
 
 class CyberDigitalTwin:
@@ -29,6 +30,8 @@ class CyberDigitalTwin:
 
         #self.business = BusinessImpact()
 
+        self.vote_engine = DigitalTwinVote()
+
     def simulate(self, incident):
 
         topology = self.topology.build(incident)
@@ -41,7 +44,7 @@ class CyberDigitalTwin:
 
         recovery = self.recovery.simulate(spread)
 
-        return self.report.build(
+        report=self.report.build(
 
             topology,
 
@@ -54,160 +57,86 @@ class CyberDigitalTwin:
             recovery
 
         )
+
+        report["reasoning"]=[
+
+            "Enterprise topology generated.",
+
+            "Attack propagation simulated.",
+
+            "Spread prediction completed.",
+
+            "Containment simulation completed.",
+
+            "Recovery simulation completed."
+
+        ]
+
+        return report
     
 
     def vote(
         self,
         incident,
-        twin
+        twin,
+        strategies
     ):
-        """
-        Digital Twin AI
 
-        Evaluates every available playbook and
-        selects the one predicted to produce the
-        smallest blast radius.
-        """
-
-        playbooks = brain.get_playbook_templates(
-            incident
-        )
-
-        if not playbooks:
+        if not strategies:
 
             return {
 
-                "agent": "Digital Twin",
+                "agent":"Digital Twin",
 
-                "recommendation": "None",
+                "recommendation":"None",
 
-                "confidence": 0,
+                "confidence":0,
 
-                "weight": 0.15,
+                "weight":0.15,
 
-                "reason": [
+                "reason":[
 
-                    "No playbooks available."
+                    "No simulated strategies."
 
-                ],
-
-                "evidence": {},
-
-                "timestamp": incident.get(
-                    "timestamp"
-                )
+                ]
 
             }
 
-        current_spread = len(
-            twin["spread"]
-        )
+        proposals=self.vote_engine.evaluate_strategies(
 
-        best_playbook = None
+            incident,
 
-        best_radius = float("inf")
-
-        for playbook in playbooks:
-
-            actions = playbook.get(
-                "actions",
-                {}
-            )
-
-            isolated = len(
-                actions.get(
-                    "isolate",
-                    []
-                )
-            )
-
-            protected = len(
-                actions.get(
-                    "protect",
-                    []
-                )
-            )
-
-            blocked = len(
-                actions.get(
-                    "block",
-                    []
-                )
-            )
-
-            predicted_radius = max(
-
-                0,
-
-                current_spread
-
-                - isolated
-
-                - blocked
-
-                - int(protected * 0.5)
-
-            )
-
-            if predicted_radius < best_radius:
-
-                best_radius = predicted_radius
-
-                best_playbook = playbook
-
-        confidence = round(
-
-            100
-
-            -
-
-            best_radius * 10
+            strategies
 
         )
 
-        confidence = max(
-
-            20,
-
-            min(
-
-                confidence,
-
-                95
-
-            )
-
-        )
+        best=proposals[0]
 
         return {
 
-            "agent": "Digital Twin",
+            "agent":"Digital Twin",
 
-            "recommendation": best_playbook["id"],
+            "recommendation":
 
-            "confidence": confidence,
+                best.playbook,
 
-            "weight": 0.15,
+            "confidence":
 
-            "reason": [
+                best.confidence,
 
-                f"Predicted blast radius {best_radius} services.",
+            "weight":0.15,
 
-                "Selected playbook minimizes enterprise spread."
+            "reason":[
+
+                f"Lowest simulated spread.",
+
+                f"Recovery optimized."
 
             ],
 
-            "evidence": {
+            "proposal":best,
 
-                "blast_radius": best_radius,
-
-                "current_spread": current_spread
-
-            },
-
-            "timestamp": incident.get(
-                "timestamp"
-            )
+            "alternatives":proposals[1:4]
 
         }
     

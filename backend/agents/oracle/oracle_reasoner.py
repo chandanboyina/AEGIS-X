@@ -12,16 +12,59 @@ class OracleReasoner:
 
     def reason(self, packet):
 
-        observer = packet["observer"]
+        
 
-        category = observer.get(
-            "threat_category",
-            "Normal"
+        #
+        # Enterprise Intelligence
+        #
+
+        enterprise = packet.get(
+
+            "enterprise_intelligence",
+
+            {}
+
         )
+
+        observer = packet["observer"]
 
         asset = packet["asset"]
 
         event = packet["event"]
+
+        category = observer.get(
+
+            "threat_category",
+
+            "Normal"
+
+        )
+
+        
+
+        campaign = enterprise.get(
+
+            "campaign",
+
+            {}
+
+        )
+
+        business = enterprise.get(
+
+            "business",
+
+            {}
+
+        )
+
+        enterprise_risk = enterprise.get(
+
+            "enterprise",
+
+            {}
+
+        )
 
         mitre = MITRE_ATTACK.get(
 
@@ -106,6 +149,81 @@ class OracleReasoner:
             "Continue investigation."
         )
 
+        #
+        # Enterprise Intelligence
+        #
+
+        overall_risk = enterprise.get("overall_risk")
+
+        #
+        # No enterprise intelligence available
+        # (Standalone Oracle)
+        #
+
+        if not overall_risk:
+
+            mapping = {
+
+                "LOW": 25,
+
+                "MEDIUM": 50,
+
+                "HIGH": 80,
+
+                "CRITICAL": 95
+
+            }
+
+            overall_risk = mapping.get(
+                threat_level,
+                30
+            )
+
+        priority = enterprise.get(
+            "priority"
+        )
+
+        if not priority:
+
+            if overall_risk >= 90:
+
+                priority = "P1"
+
+            elif overall_risk >= 75:
+
+                priority = "P2"
+
+            elif overall_risk >= 50:
+
+                priority = "P3"
+
+            else:
+
+                priority = "P4"
+
+        recommended_action = enterprise.get(
+            "recommended_action"
+        )
+
+        if not recommended_action:
+
+            recommended_action = recommendation
+
+        campaign = enterprise.get(
+            "campaign",
+            {}
+        )
+
+        business = enterprise.get(
+            "business",
+            {}
+        )
+
+        enterprise_risk = enterprise.get(
+            "enterprise",
+            {}
+        )
+
         reasoning = [
 
             f"Attack category identified as '{category}'.",
@@ -124,6 +242,12 @@ class OracleReasoner:
 
             f"MITRE Tactic: {mitre['tactic']}.",
 
+            f"Enterprise Risk : {overall_risk}/100.",
+
+            f"Enterprise Priority : {priority}.",
+
+            f"Recommended Response : {recommended_action}."
+
         ]
 
         incident_id = (
@@ -138,8 +262,23 @@ class OracleReasoner:
             "incident_id": incident_id,
 
             "category": category,
+
             "mitre": mitre,
+
             "threat_level": threat_level,
+
+            "overall_risk": overall_risk,
+
+            "priority": priority,
+
+            "recommended_action": recommended_action,
+
+            "campaign": campaign,
+
+            "business": business,
+
+            "enterprise": enterprise_risk,
+
             "reasoning": reasoning
 
         }

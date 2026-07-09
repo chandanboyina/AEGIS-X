@@ -165,7 +165,7 @@ class ThreatHunter:
 
         for incident in IncidentRepository.incidents:
 
-            if incident["asset"] == hostname:
+            if incident["asset"]["hostname"] == hostname:
 
                 matches.append(incident)
 

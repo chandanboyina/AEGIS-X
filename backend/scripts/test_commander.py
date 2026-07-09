@@ -53,15 +53,23 @@ for packet in pipeline.run_live():
 
     decision = commander["decision"]
 
-    context = packet["incident"][
-        "enterprise_context"
-    ]
+    brain = packet["incident"]["brain"]
 
-    similar = context["similar_incident"]
+    history = brain["history"]
+
+    similar = brain["similar"]
 
     print()
 
-    print("Enterprise Intelligence")
+    print("Enterprise Brain")
+
+    print("--------------------------------")
+
+    print("Previous Incidents :", len(history))
+
+    print()
+
+    print("Similar Incident")
 
     print("--------------------------------")
 
@@ -73,57 +81,71 @@ for packet in pipeline.run_live():
 
     else:
 
+        previous = similar["incident"]
+
+        analysis = similar["analysis"]
+
         print(
-
-            "Similar Incident :",
-
-            similar["incident"]["incident_id"]
-
+            f"Incident ID : {previous.get('incident_id','Unknown')}"
         )
 
         print(
-
-            "Similarity :",
-
-            similar["analysis"]["similarity"],
-
-            "%"
-
+            f"Category    : {previous.get('category','Unknown')}"
         )
 
+        print(
+            f"Similarity  : {analysis['similarity']}%"
+        )
 
-    playbook = context["recommended_playbook"]
+        print()
+
+        print("Reasoning")
+
+        for reason in analysis.get("reasons", []):
+
+            print(f"✓ {reason}")
+
+    playbook = commander["strategic_analysis"]
 
     print()
-    print("Recommended Playbook")
+    print("Commander Recommendation")
     print("--------------------------------")
 
     if playbook:
 
-        pb = playbook["recommended"]
+        candidate = playbook["recommended"]
 
-        print(f"ID   : {pb['id']}")
-        print(f"Name : {pb['name']}")
+        print(type(candidate))
+        print(candidate)
 
-        if playbook["history"]:
+        print(type(candidate["playbook"]))
+        print(candidate["playbook"])
 
-            history = playbook["history"]
+        pb = candidate["playbook"]
 
-            print(
-                f"Historical Success : "
-                f"{history['success_rate']}%"
-            )
+        print(f"Playbook  : {candidate['base_playbook']}")
+        print(f"Strategy  : {candidate['strategy']}")
+        print(f"Name      : {pb['name']}")
 
-            print(
-                f"Average Recovery   : "
-                f"{history['average_recovery']} min"
-            )
+        history = playbook.get("history")
 
-            print(
-                f"Average Loss       : "
-                f"₹{history['average_loss']} Cr"
-            )
+        if history:
 
+            print(f"Confidence         : {history['confidence']}%")
+            print(f"Success Rate       : {history['success_rate']}%")
+            print(f"Average Recovery   : {history['average_recovery']} min")
+            print(f"Average Loss       : ₹{history['average_loss']} Cr")
+
+        print()
+        print("Playbook Steps")
+        print("--------------------------------")
+
+        for step in pb["steps"]:
+            print(f"✓ {step}")
+
+    else:
+
+        print("No recommendation available.")
         print()
 
         print("Playbook Steps")
@@ -132,23 +154,7 @@ for packet in pipeline.run_live():
 
             print(f"✓ {step}")
     print()
-    print("Asset History :",context["asset_history"])
-
-    print(
-
-        "User History :",
-
-        context["user_history"]
-
-    )
-
-    print(
-
-        "MITRE History :",
-
-        context["mitre_history"]
-
-    )
+    
 
 
     print(

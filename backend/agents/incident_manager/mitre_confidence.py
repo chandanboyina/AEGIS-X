@@ -2,9 +2,17 @@ class MitreConfidence:
 
     def score(self, packet):
 
-        priority = packet["sentinel"]["priority"]
+        priority = (
+
+            packet["sentinel"]["priority"]
+
+            .upper()
+
+        )
 
         scores = {
+
+            "LOW": 50,
 
             "MEDIUM": 82,
 
@@ -14,4 +22,4 @@ class MitreConfidence:
 
         }
 
-        return scores[priority]
+        return scores.get(priority, 50)

@@ -6,8 +6,6 @@ class AttackGraphSimulator:
     after a playbook modifies the Digital Twin.
     """
 
-    import copy
-
 
 class AttackGraphSimulator:
 
@@ -36,10 +34,10 @@ class AttackGraphSimulator:
                 stage = node
 
             # ------------------------------
-            print("\n===== ATTACK GRAPH DEBUG =====")
-            print("Current Stage :", stage)
-            print("Blocked List  :", blocked_stages)
-            print("==============================")
+            #print("\n===== ATTACK GRAPH DEBUG =====")
+            #print("Current Stage :", stage)
+            #print("Blocked List  :", blocked_stages)
+            #print("==============================")
 
             stage = stage.strip().lower()
             blocked = [

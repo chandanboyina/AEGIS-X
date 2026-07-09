@@ -1,0 +1,20 @@
+[
+    {
+        "id":"CVE-2024-12345",
+        "severity":"Critical",
+        "cvss":9.8,
+        "mitre":"T1003",
+        "vendor":"Microsoft",
+        "product":"Windows Server",
+        "description":"Privilege escalation allowing credential dumping."
+    },
+    {
+        "id":"CVE-2024-56789",
+        "severity":"High",
+        "cvss":8.7,
+        "mitre":"T1190",
+        "vendor":"Cisco",
+        "product":"ASA Firewall",
+        "description":"Remote code execution."
+    }
+]

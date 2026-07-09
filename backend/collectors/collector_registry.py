@@ -1,31 +1,65 @@
-from datetime import datetime
-
-
 class CollectorRegistry:
     """
     Enterprise Collector Registry.
+
+    Maintains all telemetry collectors that are
+    available in AEGIS-X.
+
+    Future:
+    - Dynamic plugin discovery
+    - Enable / Disable collectors
+    - Health monitoring
     """
 
-    collectors = {}
+    def __init__(self):
 
-    def register(self, name):
+        self.collectors = {}
 
-        CollectorRegistry.collectors[name] = {
+    def register(
+        self,
+        name,
+        collector,
+        parser
+    ):
 
-            "status": "ONLINE",
+        self.collectors[name] = {
 
-            "registered_at": datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
+            "collector": collector,
+
+            "parser": parser,
+
+            "enabled": True
 
         }
 
-    def update_status(self, name, status):
+    def unregister(
+        self,
+        name
+    ):
 
-        if name in CollectorRegistry.collectors:
+        self.collectors.pop(
+            name,
+            None
+        )
 
-            CollectorRegistry.collectors[name]["status"] = status
+    def enable(
+        self,
+        name
+    ):
 
-    def get_all(self):
+        if name in self.collectors:
 
-        return CollectorRegistry.collectors
+            self.collectors[name]["enabled"] = True
+
+    def disable(
+        self,
+        name
+    ):
+
+        if name in self.collectors:
+
+            self.collectors[name]["enabled"] = False
+
+    def get_collectors(self):
+
+        return self.collectors

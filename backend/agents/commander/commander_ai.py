@@ -19,6 +19,12 @@ from agents.cyber_dna.dna_similarity import DNASimilarity
 from agents.cyber_dna.dna_vote import DNAVote
 from agents.ueba.ueba_engine import UEBAEngine
 from agents.ueba.ueba_vote import UEBAVote
+from agents.xai.explanation_engine import ExplanationEngine
+from agents.intelligence.intelligence_pipeline import IntelligencePipeline
+from agents.council.debate_engine import DebateEngine
+import traceback
+from agents.correlation.enterprise_intelligence_builder import EnterpriseIntelligenceBuilder
+
 
 class CommanderAI:
     """
@@ -36,6 +42,8 @@ class CommanderAI:
         self.digital_twin = CyberDigitalTwin()
 
         self.predictive = PredictiveIntelligence()
+
+        self.xai = ExplanationEngine()
 
         self.brain = brain
 
@@ -63,6 +71,12 @@ class CommanderAI:
 
         self.ueba_vote = UEBAVote()
 
+        self.intelligence = IntelligencePipeline()
+
+        self.enterprise_builder = EnterpriseIntelligenceBuilder()
+
+        self.debate = DebateEngine()
+
   
     def _store_outcome(
         self,
@@ -77,6 +91,10 @@ class CommanderAI:
         closes the incident.
         """
 
+        incident = self.intelligence.build(
+            incident
+        )
+
         best = strategic["recommended"]
 
         evaluation = self.outcome_evaluator.evaluate(
@@ -84,31 +102,37 @@ class CommanderAI:
             business
         )
 
+        #print()
+        #print("===== STORE OUTCOME =====")
+        #print(best.keys())
+        #print(best)
+        #print("=========================")
+
         brain.learn_outcome(
 
-        incident=incident,
+            incident=incident,
 
-        playbook=best["playbook"],
+            playbook=best["candidate_id"],
 
-        recovery_minutes=best["estimated_recovery"],
+            recovery_minutes=best["estimated_recovery"],
 
-        business_loss=best["estimated_loss"],
+            business_loss=best["estimated_loss"],
 
-        success=evaluation["success"],
+            success=evaluation["success"],
 
-        analyst_rating=evaluation["analyst_rating"],
+            analyst_rating=evaluation["analyst_rating"],
 
-        notes="Automatic simulation",
+            notes="Automatic simulation",
 
-        services_saved=best["services_saved"],
+            services_saved=best["services_saved"],
 
-        services_lost=max(
-            0,
-            best["predicted_spread"]
+            services_lost=max(
+                0,
+                best["predicted_spread"]
             ),
 
             blast_before=len(
-            best["topology"]["spread"]
+                best["topology"]["spread"]
             ),
 
             blast_after=best["predicted_spread"],
@@ -134,7 +158,11 @@ class CommanderAI:
         Every module returns a standard vote.
         The AI Council later combines them.
         """
-        
+
+        incident = self.intelligence.build(
+            incident
+        )
+
         strategies = strategic.get(
             "strategies",
             []
@@ -154,8 +182,9 @@ class CommanderAI:
                     incident
                 )
             )
-        except Exception as e:
-            print(f"[Council] Enterprise Brain vote failed: {e}")
+        except Exception:
+            print("[Council] Enterprise Brain vote failed")
+            traceback.print_exc()
         #-------------------------
         # Digital Twin
         #-------------------------
@@ -163,7 +192,8 @@ class CommanderAI:
             votes.append(
                 self.digital_twin.vote(
                     incident,
-                    digital_twin
+                    digital_twin,
+                    strategies
                 )
             )
         except Exception as e:
@@ -197,8 +227,8 @@ class CommanderAI:
         try:
             votes.append(
                 self.graph_vote.vote(
-                    playbooks,
-                    graph_reasoning
+                    incident,
+                    strategic["strategies"]
                 )
             )
         except Exception as e:
@@ -219,7 +249,7 @@ class CommanderAI:
             votes.append(
                 self.dna_vote.vote(
                     strategic["recommended"]["playbook"],
-                    dna_similarity
+                    strategic["strategies"]
                 )
             )
         except Exception as e:
@@ -232,8 +262,8 @@ class CommanderAI:
         try:
             votes.append(
                 self.ueba_vote.vote(
-                    strategic["recommended"]["playbook"],
-                    ueba_result
+                    incident,
+                    strategic["strategies"]
                 )
             )
         except Exception as e:
@@ -248,8 +278,8 @@ class CommanderAI:
         try:
             votes.append(
                 self.business_vote.vote(
-                    incident,
-                    forecast["forecast"]["business_impact"]
+                    forecast["forecast"]["business_impact"],
+                    strategic["strategies"]
                 )
             )
         except Exception as e:
@@ -262,7 +292,7 @@ class CommanderAI:
             votes.append(
                 self.risk_vote.vote(
                     incident,
-                    forecast["forecast"]["enterprise_risk"]
+                    strategic["strategies"]
                 )
             )
         except Exception as e:
@@ -289,6 +319,10 @@ class CommanderAI:
 
     def analyze(self, incident):
 
+        incident = self.intelligence.build(
+            incident
+        )
+
         incident.setdefault(
             "timestamp",
             datetime.now(UTC).isoformat()
@@ -299,7 +333,7 @@ class CommanderAI:
         # Enterprise Cyber Brain
         # -----------------------------------
 
-        asset = incident["asset"]
+        asset = incident["asset"]["hostname"]
 
         username = incident.get(
             "username",
@@ -526,11 +560,49 @@ class CommanderAI:
 
         
 
-        print("\n===== COUNCIL DEBUG =====")
-        print("Graph AI      :", graph_reasoning is not None)
-        print("DNA Similarity:", dna_similarity)
-        print("UEBA          :", ueba_result)
-        print("=========================\n")
+        #print("\n===== COUNCIL DEBUG =====")
+        #print("Graph AI      :", graph_reasoning is not None)
+        #print("DNA Similarity:", dna_similarity)
+        #print("UEBA          :", ueba_result)
+        #print("=========================\n")
+
+        enterprise_intelligence = self.enterprise_builder.build(
+
+            
+
+            threat=incident,
+
+            behavior=incident.get(
+                "behavior_correlation",
+                {}
+            ),
+
+            campaign=forecast["forecast"].get(
+                "campaign_risk",
+                {}
+            ),
+
+            ueba=ueba_result,
+
+            cyber_dna={
+
+                "similarity": dna_similarity
+
+            },
+
+            business=forecast["forecast"].get(
+                "business_impact",
+                {}
+            ),
+
+            enterprise=forecast["forecast"].get(
+                "enterprise_risk",
+                {}
+            )
+
+        )
+
+        incident["enterprise_intelligence"] = enterprise_intelligence
 
         votes = self._collect_votes(
             incident,
@@ -543,11 +615,67 @@ class CommanderAI:
             ueba_result
         )
 
+        debate = self.debate.debate(votes)
+
+        print()
+
+        print("=" * 70)
+        print("AI COUNCIL DEBATE")
+        print("=" * 70)
+        print()
+        for option in debate:
+            print(
+                f"\nPlaybook : {option['playbook']}"
+            )
+            print(
+                f"Support : {option['support']} agents"
+            )
+
+            print(
+                f"Average Confidence : "
+
+                f"{option['average_confidence']}%"
+            )
+
+            print()
+
+            for supporter in option["supporters"]:
+                print(
+                    f"• {supporter['agent']}"
+
+                    f" ({supporter['confidence']}%)"
+                )
+
+                print(
+
+                    f"  {supporter['reason'][0]}"
+
+                )
+
+                alts = supporter.get(
+                    "alternatives",
+                    []
+                )
+
+                if alts:
+                    print("  Alternatives:")
+                    for alt in alts:
+                        print(
+                            f"     "
+                            f"{alt['playbook']}"
+                            f" ({alt['score']})"
+                        )
+
+        print()
+        print("=" * 70)
+        print()
+
+
         council = self.consensus.calculate(votes)
 
-        print("\n========== STORE OUTCOME ==========")
-        print("About to store outcome...")
-        print("==================================")
+        #print("\n========== STORE OUTCOME ==========")
+        #print("About to store outcome...")
+        #print("==================================")
 
         self._store_outcome(
             incident,
@@ -575,32 +703,61 @@ class CommanderAI:
         )
 
         
+        # ---------------------------------------
+        # Explainable AI
+        # ---------------------------------------
+
+        xai = self.xai.explain(
+            incident,
+            {
+                "strategic_analysis": strategic,
+                "decision": decision
+            },
+            votes
+        )
 
         result = {
 
-            "forecast": forecast,
-
+            # Core AI
             "decision": decision,
-
-            "digital_twin": digital_twin,
+            "forecast": forecast,
 
             "strategic_analysis": strategic,
 
+            # Commander Recommendation
+            "recommended_playbook": strategic["recommended"],
+
+            #
+            # Enterprise Brain
+            #
+
+            "enterprise_context": incident["enterprise_context"],
+
+            "enterprise_intelligence": enterprise_intelligence,
+
             "experience_replay": experience,
 
+            # AI Modules
+            "digital_twin": digital_twin,
             "graph_ai": {
                 "graph": attack_graph,
                 "analysis": graph_reasoning
             },
-
             "cyber_dna": {
                 "fingerprint": dna,
-                "similarity": dna_similarity
+                "similarity": dna_similarity,
+                "score": incident["enterprise_context"]["cyber_dna"]
             },
-
             "ueba": ueba_result,
 
+            
+
+            # Council
             "ai_council": council,
+            "debate": debate,
+
+            # Explainability
+            "xai": xai
 
         }
 
@@ -653,6 +810,81 @@ class CommanderAI:
 
         print()
 
+        print("=" * 70)
+        print("EXPLAINABLE AI")
+        print("=" * 70)
+
+        print()
+        print(
+            xai["summary"]["summary"]
+        )
+
+        print()
+        print("Council")
+        for line in xai["council"]["reasoning"]:
+            print(f"✓ {line}")
+
+        print()
+        print("Business")
+        for line in xai["business"]["reasoning"]:
+            print(f"✓ {line}")
+        print()
+        print("Attack Graph")
+        for line in xai["graph"]["reasoning"]:
+            print(f"✓ {line}")
+
         CommanderRepository.add(result)
 
         return result
+    
+        
+
+    def vote(self, incident):
+        """
+        Commander AI recommendation
+        for AI Council.
+        """
+
+        commander = incident.get("commander", {})
+
+        recommended = commander.get("recommended_playbook", {})
+
+
+        recommendation = "Investigate"
+
+        if isinstance(recommended, dict):
+
+            recommendation = (
+                recommended.get("candidate_id")
+                or recommended.get("base_playbook")
+                or "Investigate"
+            )
+
+        elif isinstance(recommended, str):
+
+            recommendation = recommended
+
+        return {
+
+            "agent": "Commander",
+
+            "recommendation": recommendation,
+
+            "confidence": commander.get("confidence", 90),
+
+            "weight": 0.20,
+
+            "reason": commander.get(
+                "reason",
+                ["Commander strategic analysis."]
+            ),
+
+            # keep complete analysis separately
+            "analysis": recommended,
+
+            "evaluation": commander.get(
+                "strategies",
+                []
+            )
+
+        }

@@ -3,6 +3,7 @@ from core.brain_service import brain
 from agents.commander.timeline_simulator import TimelineSimulator
 from agents.graph_ai.attack_graph_ai import AttackGraphAI
 from agents.graph_ai.graph_reasoner import GraphReasoner
+from agents.knowledge_graph.playbook_repository import PlaybookRepository
 
 
 class PredictiveIntelligence:
@@ -51,9 +52,13 @@ class PredictiveIntelligence:
             incident
         )
 
-        templates = brain.get_playbook_templates(
-            incident
+        repo = PlaybookRepository()
+
+        templates = repo.candidates(
+            incident["category"]
         )
+
+        
 
         if recommendation is None:
 
@@ -65,29 +70,22 @@ class PredictiveIntelligence:
 
             }
         
-        ranking = recommendation.get("ranking", [])
+        ranking = recommendation.get(
+            "ranking",
+            []
+        )
 
         # ------------------------------------
         # No historical ranking yet
+        # Evaluate every template once
         # ------------------------------------
 
-        for template in templates:
+        if len(ranking) == 0:
 
-            history = None
-
-            if recommendation:
-
-                for item in recommendation.get(
-                    "ranking",
-                    []
-                ):
-                    if item["playbook"] == template["id"]:
-                        history = item
-                        break
-
-            if history is None:
+            for template in templates:
 
                 history = {
+
                     "success_rate": 70,
                     "average_recovery": 30,
                     "average_loss": business["estimated_loss_value"],
@@ -97,28 +95,34 @@ class PredictiveIntelligence:
                     "observations": 0,
                     "reputation": 50,
                     "average_analyst_rating": 5
+
                 }
 
-            simulated = self.simulator.simulate(
-                incident,
-                template,
-                digital_twin,
-                {
-                    "recommended": history
-                },
-                time_machine,
-                business
-            )
+                simulated = self.simulator.simulate(
 
-            strategies.append(
-                simulated
-            )
+                    incident,
 
-            print(
-                len(strategies)
-            )
+                    template,
+
+                    digital_twin,
+
+                    {
+                        "recommended": history
+                    },
+
+                    time_machine,
+
+                    business
+
+                )
+
+                strategies.append(
+                    simulated
+                )
+
         # ------------------------------------
         # Historical ranking exists
+        # Evaluate ranked playbooks only
         # ------------------------------------
 
         else:
@@ -127,28 +131,76 @@ class PredictiveIntelligence:
 
             for playbook in ranking:
 
-                playbook_template = brain.get_playbook_by_id(
-                    playbook["playbook"]
-                )
+                playbook_template = playbook["playbook"]
 
                 if playbook_template is None:
                     continue
 
+                #
+                # Temporary candidate wrapper
+                #
+
+                template = playbook["playbook"]
+
+                if isinstance(template, dict):
+
+                    playbook_id = template["id"]
+
+                else:
+
+                    playbook_id = template
+
+                candidate = {
+
+                    "candidate_id":
+                        playbook_id,
+
+                    "base_playbook":
+                        playbook_id,
+
+                    "strategy":
+                        "Historical",
+
+                    "playbook":
+                        template,
+
+                    "metrics": {
+
+                        "graph_bias":0,
+
+                        "business_bias":0,
+
+                        "brain_bias":0,
+
+                        "risk_bias":0,
+
+                        "predictive_bias":0
+
+                    }
+
+                }
+
                 simulated = self.simulator.simulate(
+
                     incident,
-                    playbook_template,
+
+                    candidate,
+
                     digital_twin,
+
                     {
-
                         "recommended": playbook
-
                     },
 
                     time_machine,
+
                     business
+
                 )
 
-                strategies.append(simulated)
+                strategies.append(
+                    simulated
+                )
 
         strategies.sort(
 
@@ -157,6 +209,26 @@ class PredictiveIntelligence:
                 -x["success_probability"]
             )
         )
+
+        #
+        # Enterprise safety
+        #
+
+        if not strategies:
+
+            return {
+
+                "recommended": None,
+
+                "strategies": [],
+
+                "timeline": [],
+
+                "graph_analysis": {}
+
+            }
+
+        
 
         attack_graph = self.graph_ai.build(
             time_machine["timeline"]
@@ -184,6 +256,8 @@ class PredictiveIntelligence:
 
         )
 
+        
+
         return {
 
             "recommended": best,
@@ -195,36 +269,47 @@ class PredictiveIntelligence:
             "graph_analysis": graph_analysis
         }
     
-    def vote(
-        self,
-        strategy
-    ):
+    def vote(self, strategy):
+
+        #recommendation = (
+        #    strategy.get("candidate_id")
+        #    or (
+        #        f"{strategy['playbook']}-{strategy['strategy']}"
+        #        if strategy.get("strategy")
+        #        else strategy.get("playbook")
+        #    )
+        #    or "Investigate"
+        #)
+
+        recommendation = strategy["candidate_id"]
 
         return {
 
-            "agent":"Predictive",
+            "agent": "Predictive",
 
-            "recommendation":
-                strategy["playbook"],
+            "recommendation": recommendation,
 
-            "confidence":
-                strategy["confidence"],
+            "confidence": strategy.get("confidence", 0),
 
-            "weight":0.20,
+            "weight": 0.20,
 
-            "reason":
-                strategy["reasoning"],
+            "reason": strategy.get("reasoning", []),
 
-            "evidence":{
+            "evidence": {
 
                 "loss":
-                    strategy["estimated_loss"],
+                    strategy.get("estimated_loss"),
 
                 "spread":
-                    strategy["predicted_spread"]
+                    strategy.get("predicted_spread"),
+
+                "strategy":
+                    strategy.get("strategy"),
+
+                "success":
+                    strategy.get("success_probability")
 
             }
 
         }
-
     

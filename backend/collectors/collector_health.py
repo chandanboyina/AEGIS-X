@@ -1,37 +1,43 @@
-import random
-
-from datetime import datetime
-
-
 class CollectorHealth:
     """
-    Enterprise Collector Health.
+    Enterprise Collector Health Monitor
     """
 
-    def check(self, name):
+    def __init__(self):
 
-        latency = random.randint(5, 40)
+        self.health = {}
 
-        return {
+    def update(
+        self,
+        collector,
+        success,
+        message
+    ):
 
-            "collector":
-
-                name,
+        self.health[collector] = {
 
             "status":
+                "HEALTHY" if success else "FAILED",
 
-                "ONLINE",
-
-            "latency":
-
-                f"{latency} ms",
-
-            "last_event":
-
-                datetime.now().strftime(
-
-                    "%H:%M:%S"
-
-                )
+            "message":
+                message
 
         }
+
+    def get(self):
+
+        return self.health
+
+    def status(
+        self,
+        latency,
+        events
+    ):
+
+        if events == 0:
+            return "WARNING"
+
+        if latency > 1000:
+            return "DEGRADED"
+
+        return "HEALTHY"

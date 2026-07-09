@@ -1,0 +1,20 @@
+[
+  {
+    "id": "T1003",
+    "technique": "Credential Dumping",
+    "tactic": "Credential Access",
+    "description": "Adversaries attempt to dump credentials from operating systems."
+  },
+  {
+    "id": "T1078",
+    "technique": "Valid Accounts",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries use legitimate credentials."
+  },
+  {
+    "id": "T1486",
+    "technique": "Data Encrypted for Impact",
+    "tactic": "Impact",
+    "description": "Adversaries encrypt data to interrupt business operations."
+  }
+]

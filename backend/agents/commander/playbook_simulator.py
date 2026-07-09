@@ -2,6 +2,9 @@ import copy
 from agents.commander.attack_graph_simulator import AttackGraphSimulator
 from agents.commander.confidence_engine import ConfidenceEngine
 
+
+
+
 class PlaybookSimulator:
     """
     Simulates the future state of the enterprise
@@ -25,7 +28,7 @@ class PlaybookSimulator:
     def simulate(
         self,
         incident,
-        playbook,
+        candidate,
         digital_twin,
         outcome,
         attack_path,
@@ -36,6 +39,12 @@ class PlaybookSimulator:
         topology = copy.deepcopy(
             digital_twin
         )
+
+        playbook = candidate["playbook"]
+
+        metrics = candidate["metrics"]
+
+        strategy = candidate["strategy"]
 
         actions = playbook.get(
             "actions",
@@ -118,6 +127,12 @@ class PlaybookSimulator:
             topology
         )
 
+        services_saved = max(
+            services_saved,
+            len(graph["removed_stages"])
+        )
+
+
         #print("\n===== GRAPH DEBUG =====")
         #print("Blocked :", blocked)
         #print("Remaining :", graph["remaining_path"])
@@ -125,11 +140,6 @@ class PlaybookSimulator:
         #print("=======================\n")
 
         
-
-        # -----------------------------------
-        # Synchronize Attack Graph and
-        # Digital Twin
-        # -----------------------------------
 
         # -----------------------------------
         # Risk-weighted remaining spread
@@ -142,23 +152,39 @@ class PlaybookSimulator:
                 1.0
             )
 
+        # -----------------------------------
+        # Synchronize Attack Graph and
+        # Digital Twin
+        # -----------------------------------
+
         remaining_attack = len(
             graph["remaining_path"]
         )
 
+        remaining_services = len(
+            spread
+        )
+
+        # Both graph and digital twin agree
+
         predicted_spread = min(
+
             remaining_attack,
-            len(spread)
+
+            remaining_services
+
         )
 
-        predicted_spread = int(
-            predicted_spread
-        )
+        # If attack graph is completely removed,
+        # enterprise spread is also removed.
 
-        if graph["stopped"]:
+        if (
+            graph["stopped"]
+            or
+            remaining_attack == 0
+        ):
+
             predicted_spread = 0
-        else:
-            predicted_spread = len(spread)
 
         current_spread = len(
             digital_twin["spread"]
@@ -202,46 +228,88 @@ class PlaybookSimulator:
             0.3*graph_ratio
         )
 
+        loss_modifier = metrics.get(
+            "loss_modifier",
+            1.0
+        )
+
+        estimated_loss = (
+            current_loss *
+            loss_ratio *
+            loss_modifier *
+            criticality_multiplier
+        )
+
         estimated_loss = round(
-        current_loss *
-        loss_ratio,
-        2
+            estimated_loss,
+            2
         )
 
         estimated_loss = max(
-
-        0.05,
-
-        min(
-
-        estimated_loss,
-
-        current_loss
-
+            0.05,
+            min(
+                estimated_loss,
+                current_loss
+            )
         )
 
+        # -----------------------------------
+        # Strategy modifiers
+        # -----------------------------------
+
+
+        recovery_modifier = metrics.get(
+            "recovery_modifier",
+            1.0
         )
 
-        estimated_loss=min(
-        current_loss,
-        estimated_loss,
+        spread_modifier = metrics.get(
+            "spread_modifier",
+            1.0
         )
-        
-        recovery_ratio = (
-            predicted_spread /
-            max(current_spread, 1)
+
+        estimated_loss = round(
+            estimated_loss,
+            2
+        )
+
+        predicted_spread = max(
+
+            0,
+
+            round(
+
+                predicted_spread *
+
+                spread_modifier
+
+            )
+
+        )
+                
+        # -----------------------------------
+        # Recovery estimation
+        # -----------------------------------
+
+
+        estimated_recovery = (
+            historical_recovery *
+            spread_ratio *
+            recovery_modifier
         )
 
         estimated_recovery = max(
+
             5,
+
             round(
-            historical_recovery *
-            (
-            predicted_spread /
-            max(current_spread,1)
-            ),
-            1
+
+                estimated_recovery,
+
+                1
+
             )
+
         )
 
         # -----------------------------------
@@ -281,6 +349,15 @@ class PlaybookSimulator:
 
         )
 
+        confidence_result["confidence"] = min(
+            95,
+            confidence_result["confidence"]
+
+            +
+
+            len(graph["removed_stages"])
+        )
+
 
         
 
@@ -304,13 +381,60 @@ class PlaybookSimulator:
             for stage in graph["removed_stages"]
         ]
 
+        success_probability = round(
+
+            historical_success
+            +
+            len(graph["removed_stages"]) * 3
+            -
+            predicted_spread * 2
+        )
+
+        success_probability = max(
+            40,
+            min(
+                success_probability,
+                95
+            )
+        )
+
         return {
 
-            "playbook": playbook["id"],
+            # ---------------------------------
+            # Candidate Identity
+            # ---------------------------------
 
-            "strategy": playbook["id"],
+            "candidate_id":
+                candidate["candidate_id"],
 
-            "success_probability": historical_success,
+            "base_playbook":
+                candidate["base_playbook"],
+
+            "playbook":
+                playbook,
+
+            "playbook": playbook,
+
+            "playbook_id": playbook["id"],
+
+            "strategy":
+                strategy,
+
+            "metrics":
+                metrics,
+
+            # ---------------------------------
+            # Simulation
+            # ---------------------------------
+
+            "success_probability":
+                success_probability,
+
+            "ueba_confidence":
+                confidence_result["confidence"],
+
+            "dna_similarity":
+                success_probability,
 
             "confidence":
                 confidence_result["confidence"],
@@ -318,22 +442,58 @@ class PlaybookSimulator:
             "confidence_breakdown":
                 confidence_result["breakdown"],
 
-            "estimated_loss": estimated_loss,
+            "estimated_loss":
+                estimated_loss,
 
-            "estimated_recovery": estimated_recovery,
+            "estimated_recovery":
+                estimated_recovery,
 
-            "predicted_spread": predicted_spread,
+            "predicted_spread":
+                predicted_spread,
 
-            "services_saved": services_saved,
+            "services_saved":
+                services_saved,
 
-            "graph": graph,
+            "continuity":
 
-            "topology": topology,
+                max(
+                    40,
+                    100 - predicted_spread * 20
+                ),
 
-            "blocked": blocked,
+            "customer_score":
 
+                max(
+                    50,
+                    100 - predicted_spread * 15
+                ),
 
-            "reasoning": [
+            "compliance_score":
+
+                max(
+                    60,
+                    100 - len(graph["removed_stages"]) * 5
+                ),
+
+            "reputation_score":
+
+                max(
+                    40,
+                    100 - estimated_loss * 2
+                ),
+
+            "graph":
+                graph,
+
+            "topology":
+                topology,
+
+            "blocked":
+                blocked,
+
+            "reasoning":[
+
+                f"Strategy : {strategy}",
 
                 f"Isolated {len(isolated)} services.",
 
@@ -343,12 +503,17 @@ class PlaybookSimulator:
 
                 f"Attack graph reduced to {len(graph['remaining_path'])} stages.",
 
-                f"Blocked stages: "
-                f"{', '.join(removed_stage_names) if removed_stage_names else 'None'}",
+                f"Blocked stages: {', '.join(removed_stage_names) if removed_stage_names else 'None'}",
 
                 f"Estimated financial loss ₹{estimated_loss} Cr.",
 
-                f"Historical success {historical_success}%."
+                f"Historical success {historical_success}%",
+
+                f"Predicted success {success_probability}%",
+
+                f"Strategy {strategy}",
+
+                f"Graph removed {len(graph['removed_stages'])} stages."
 
             ]
 

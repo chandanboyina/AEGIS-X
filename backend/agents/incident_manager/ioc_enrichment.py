@@ -23,19 +23,17 @@ class IOCEnrichment:
 
         iocs = []
 
-        if "source_ip" in event:
+        # ----------------------------------------
+        # Source IP
+        # ----------------------------------------
 
-            # ----------------------------------------
-            # Occasionally reuse known malicious IPs
-            # ----------------------------------------
+        source_ip = event.get("source_ip")
+
+        if source_ip:
 
             if random.randint(1, 4) == 1:
 
                 source_ip = random.choice(COMMON_IPS)
-
-            else:
-
-                source_ip = event["source_ip"]
 
             iocs.append({
 
@@ -49,13 +47,19 @@ class IOCEnrichment:
 
             })
 
-        if "username" in event:
+        # ----------------------------------------
+        # Username
+        # ----------------------------------------
+
+        username = event.get("username")
+
+        if username:
 
             iocs.append({
 
                 "type": "Username",
 
-                "value": event["username"],
+                "value": username,
 
                 "confidence": "High",
 
@@ -63,15 +67,31 @@ class IOCEnrichment:
 
             })
 
-        if "process" in event:
+        # ----------------------------------------
+        # Process
+        # ----------------------------------------
 
-            process = event["process"]
+        process = event.get("process")
 
-            md5 = hashlib.md5(process.encode()).hexdigest()
+        if process:
 
-            sha1 = hashlib.sha1(process.encode()).hexdigest()
+            md5 = hashlib.md5(
 
-            sha256 = hashlib.sha256(process.encode()).hexdigest()
+                process.encode()
+
+            ).hexdigest()
+
+            sha1 = hashlib.sha1(
+
+                process.encode()
+
+            ).hexdigest()
+
+            sha256 = hashlib.sha256(
+
+                process.encode()
+
+            ).hexdigest()
 
             iocs.extend([
 
@@ -125,21 +145,29 @@ class IOCEnrichment:
 
             ])
 
-        if "ports" in event:
+        # ----------------------------------------
+        # Ports
+        # ----------------------------------------
 
-            for port in event["ports"]:
+        ports = event.get("ports", [])
 
-                iocs.append({
+        for port in ports:
 
-                    "type": "Port",
+            iocs.append({
 
-                    "value": port,
+                "type": "Port",
 
-                    "confidence": "Medium",
+                "value": port,
 
-                    "reputation": "Scanned"
+                "confidence": "Medium",
 
-                })
+                "reputation": "Scanned"
+
+            })
+
+        # ----------------------------------------
+        # Ransomware Extras
+        # ----------------------------------------
 
         if packet["oracle"]["category"] == "Ransomware":
 

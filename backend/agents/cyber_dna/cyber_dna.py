@@ -21,7 +21,7 @@ class CyberDNA:
 
         )
 
-        return {
+        dna = {
 
             "category":
 
@@ -41,19 +41,11 @@ class CyberDNA:
 
             "business":
 
-                profile.get(
-
-                    "business_unit"
-
-                ),
+                profile.get("business_unit"),
 
             "criticality":
 
-                profile.get(
-
-                    "criticality"
-
-                ),
+                profile.get("criticality"),
 
             "users":
 
@@ -76,3 +68,23 @@ class CyberDNA:
                 )
 
         }
+
+        dna["reasoning"] = [
+
+            f"Attack category: {dna['category']}.",
+
+            f"MITRE technique: {dna['mitre']}.",
+
+            f"Business service: {dna['service']}.",
+
+            f"Business unit: {dna['business']}.",
+
+            f"Asset criticality: {dna['criticality']}.",
+
+            f"Estimated affected users: {dna['users']}.",
+
+            f"Enterprise risk score: {dna['risk']}."
+
+        ]
+
+        return dna

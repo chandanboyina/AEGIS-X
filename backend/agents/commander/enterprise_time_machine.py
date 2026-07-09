@@ -157,7 +157,7 @@ class EnterpriseTimeMachine:
 
         history = self.brain.attack_history(
 
-            incident["asset"]
+            incident["asset"]["hostname"]
 
         )
 

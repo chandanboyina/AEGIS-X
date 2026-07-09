@@ -28,6 +28,13 @@ from agents.commander.commander_ai import CommanderAI
 from agents.infrastructure.asset_inventory import AssetInventory
 from agents.infrastructure.dependency_graph import EnterpriseDependencyGraph
 from agents.infrastructure.blast_radius import BlastRadius
+from agents.oracle.oracle_agent import OracleAgent
+from agents.digital_twin.digital_twin import CyberDigitalTwin
+from agents.council.debate_engine import DebateEngine
+from agents.knowledge_graph.enterprise_brain import EnterpriseCyberBrain
+from agents.council.debate_engine import DebateEngine
+from agents.sentinel.sentinel_agent import SentinelAgent
+from agents.cyber_dna.cyber_dna import CyberDNA
 
 #from backend.models import incident
 
@@ -91,11 +98,25 @@ class IncidentManager:
 
         self.commander = CommanderAI()
 
+        self.oracle = OracleAgent()
+
         self.asset_inventory = AssetInventory()
 
         self.dependency_graph = EnterpriseDependencyGraph()
 
         self.blast_radius = BlastRadius()
+
+        self.digital_twin = CyberDigitalTwin()
+
+        self.council = DebateEngine()
+
+        self.brain = EnterpriseCyberBrain()
+
+        self.council = DebateEngine()
+        
+        self.sentinel = SentinelAgent()
+
+        self.cyber_dna = CyberDNA()
 
         
 
@@ -106,6 +127,9 @@ class IncidentManager:
         IncidentManager.counter += 1
 
         priority = packet["sentinel"]["priority"]
+        priority = priority.upper()
+
+        packet["sentinel"]["priority"] = priority
 
         # ----------------------------------------
         # Get Assignment
@@ -115,34 +139,38 @@ class IncidentManager:
         # ----------------------------------------
         # Build Incident
         # ----------------------------------------
+        
         incident = {
 
             "incident_id": incident_id,
 
-            "asset": packet["asset"]["hostname"],
+            # Complete Asset Object
+            "asset": packet["asset"],
+
+            # Complete Event
+            "event": packet["event"],
+
+            # Oracle Output
+            "oracle": packet["oracle"],
+
+            # Observer Output
+            "observer": packet["observer"],
 
             "category": packet["oracle"]["category"],
 
             "severity": priority,
 
-            "status": self.status.initial_status(
-                priority
-            ),
+            "status": self.status.initial_status(priority),
 
             "assigned_team": assignment["team"],
 
             "assigned_owner": assignment["owner"],
 
-            "created": datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
+            "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 
-            "history": self.history.build(
-                packet
-            ),
+            "history": self.history.build(packet),
 
-            "observer_confidence":
-                packet["observer"]["confidence"],
+            "observer_confidence": packet["observer"]["confidence"],
 
         }
 
@@ -155,14 +183,14 @@ class IncidentManager:
 
         incident["asset_profile"] = self.asset_inventory.get(
 
-            incident["asset"]
+            incident["asset"]["hostname"]
 
         )
 
         #----------------------------------------
         # Dependency Graph
         #----------------------------------------
-        dependencies = self.dependency_graph.find_dependencies(incident["asset"])
+        dependencies = self.dependency_graph.find_dependencies(incident["asset"]["hostname"])
 
         incident["blast_radius"] = (
             self.blast_radius.calculate(
@@ -302,18 +330,178 @@ class IncidentManager:
                 incident
             )
         )
+
+        # ----------------------------------------
+        # Digital Twin Simulation
+        # ----------------------------------------
+
+        incident["digital_twin"] = (
+            self.digital_twin.simulate(
+                incident
+            )
+
+        )
+
+        #
+        # Enterprise Brain
+        #
+
+        self.brain.remember(
+            incident
+        )
+
+        incident["brain"] = {
+
+            "history":
+
+                self.brain.attack_history(
+
+                    incident["asset"]["hostname"]
+
+                ),
+
+            "similar":
+
+                self.brain.find_similar(
+
+                    incident
+
+                )
+
+        }
+
+        #
+        # Cyber DNA
+        #
+
+        incident["cyber_dna"] = (
+
+            self.cyber_dna.build(
+                incident
+
+            )
+
+        )
+
+        packet["incident"] = incident
+
+        #
+        # ORACLE 
+        #
+
+        packet = self.oracle.investigate(
+            packet
+        )
+
+        #
+        # Sentinel
+        #
+
+        packet = self.sentinel.respond(
+            packet
+        )
+
         # ----------------------------------------
         # Commander AI Analysis
         # ----------------------------------------
-        incident["commander"] = (
+        commander_input = {
+            **packet,
+            **incident
+        }
 
+        incident["commander"] = (
             self.commander.analyze(
+                commander_input
+            )
+        )
+
+        packet.update(commander_input)
+
+        incident = packet["incident"]
+
+
+
+        
+
+        # ----------------------------------------
+        # AI Council
+        # ----------------------------------------
+
+        votes = []
+
+        votes.append(
+
+            self.oracle.vote(packet)
+
+        )
+
+        votes.append(
+
+            self.commander.vote(incident)
+
+        )
+
+        votes.append(
+
+            self.brain.vote(incident)
+
+        )
+
+        strategies = incident["commander"] \
+            .get("strategic_analysis", {}) \
+            .get("strategies", [])
+
+        votes.append(
+
+            self.digital_twin.vote(
+
+                incident,
+
+                incident["digital_twin"],
+
+                strategies
+
+            )
+
+        )
+
+        votes.append(
+
+            self.sentinel.vote(
 
                 incident
 
             )
 
         )
+
+        print("\n========== VOTES ==========")
+
+        from pprint import pprint
+
+        for i, vote in enumerate(votes, start=1):
+            print(f"\nVote {i}")
+            pprint(vote)
+
+        print("===========================\n")
+
+
+        incident["council"] = self.council.debate(
+
+            votes
+
+        )
+        
+
+        
+
+        #
+        # Oracle AI performs the final
+        # enterprise investigation after
+        # all AI modules have completed.
+        #
+
+        
 
         # ----------------------------------------
         # Store in packet
@@ -326,4 +514,5 @@ class IncidentManager:
             incident
         )
 
+    
         return packet

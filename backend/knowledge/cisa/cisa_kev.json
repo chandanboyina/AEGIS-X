@@ -1,0 +1,20 @@
+[
+    {
+        "id": "CISA-KEV-2024-001",
+        "cve": "CVE-2024-12345",
+        "vendor": "Microsoft",
+        "product": "Windows Server",
+        "mitre": "T1003",
+        "status": "Actively Exploited",
+        "action": "Apply security update immediately."
+    },
+    {
+        "id": "CISA-KEV-2024-002",
+        "cve": "CVE-2024-56789",
+        "vendor": "Cisco",
+        "product": "ASA Firewall",
+        "mitre": "T1190",
+        "status": "Actively Exploited",
+        "action": "Upgrade to latest firmware."
+    }
+]

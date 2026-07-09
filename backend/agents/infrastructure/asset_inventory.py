@@ -126,6 +126,9 @@ class AssetInventory:
 
     def get(self, hostname):
 
+        if isinstance(hostname, dict):
+            hostname = hostname.get("hostname", "")
+
         hostname = hostname.upper()
 
         for pattern, profile in self.patterns.items():

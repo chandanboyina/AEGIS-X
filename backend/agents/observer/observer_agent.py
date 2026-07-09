@@ -300,6 +300,16 @@ class ObserverAgent:
 
             "recommended_action": action,
 
+            # XAI
+
+            "reasoning":reasoning,
+
+            "analysis":analysis,
+
+            "risk":risk,
+
+            "features":packet["behavior"]["features"]
+
             
 
         }
@@ -325,7 +335,7 @@ class ObserverAgent:
 
         })
 
-                # ---------------------------------
+        # ---------------------------------
         # Generate Observer Report
         # ---------------------------------
 

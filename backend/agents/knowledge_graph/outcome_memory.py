@@ -4,6 +4,7 @@ from agents.knowledge_graph.reputation_engine import ReputationEngine
 from agents.knowledge_graph.experience_replay import ExperienceReplay
 import json
 import os
+from agents.knowledge_graph.playbook_repository import PlaybookRepository
 
 
 
@@ -145,7 +146,7 @@ class OutcomeMemory:
 
             "attack": incident["category"],
 
-            "asset": incident["asset"],
+            "asset": incident["asset"]["hostname"],
 
             "severity": incident["severity"],
 
@@ -185,7 +186,13 @@ class OutcomeMemory:
 
         mitre_id = mitre.get("id", "UNKNOWN")
 
-        asset = incident.get("asset")
+        asset = incident.get(
+            "asset",
+            {}
+        ).get(
+            "hostname",
+            "UNKNOWN"
+        )
 
         severity = incident.get("severity")
 
@@ -238,7 +245,13 @@ class OutcomeMemory:
 
         mitre_id = mitre.get("id", "UNKNOWN")
 
-        asset = incident.get("asset")
+        asset = incident.get(
+            "asset",
+            {}
+        ).get(
+            "hostname",
+            "UNKNOWN"
+        )
 
         severity = incident.get("severity")
 
@@ -335,6 +348,8 @@ class OutcomeMemory:
             if item["success"]:
 
                 scores[pb]["success"] += 1
+
+        repo = PlaybookRepository()
 
         recommendations = []
 
@@ -479,7 +494,7 @@ class OutcomeMemory:
 
             recommendations.append({
 
-                "playbook": pb,
+                "playbook": repo.get(pb),
 
                 "reputation": reputation,
 

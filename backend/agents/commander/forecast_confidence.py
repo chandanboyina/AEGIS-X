@@ -78,9 +78,11 @@ class ForecastConfidence:
         # Asset Criticality
         # ----------------------------
 
-        asset = incident["asset"]
+        profile = incident["asset_profile"]
 
-        if asset in self.critical_assets:
+        service = profile["service"]
+
+        if service in self.critical_assets:
 
             asset_score = 100
 

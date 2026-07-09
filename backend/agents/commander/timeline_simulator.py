@@ -59,12 +59,25 @@ class TimelineSimulator:
         # Show recovery instead of attack stages
         # ---------------------------------------
 
-        if playbook and playbook["graph"]["stopped"]:
-            now = datetime.now()
-            current_loss = round(
-                business_impact["estimated_loss_value"],
-                2
+        if (
+            playbook
+            and (
+                playbook["graph"]["stopped"]
+                or len(playbook["graph"]["remaining_path"]) == 0
             )
+        ):
+            now = datetime.now()
+            
+            if playbook:
+                current_loss = round(
+                    playbook["estimated_loss"],
+                    2
+                )
+            else:
+                current_loss = round(
+                    business_impact["estimated_loss_value"],
+                    2
+                )
 
             return [
 
@@ -162,13 +175,77 @@ class TimelineSimulator:
             digital_twin["spread"]
         )
 
-        loss = business_impact[
-            "estimated_loss_value"
-        ]
+        if playbook:
+            loss = playbook["estimated_loss"]
+        else:
+            loss = business_impact[
+                "estimated_loss_value"
+            ]
 
         accumulated_loss = loss
 
         stages = attack_path
+
+        if len(stages) == 0:
+
+            if playbook:
+                current_loss = round(
+                    playbook["estimated_loss"],
+                    2
+                )
+            else:
+                current_loss = round(
+                    business_impact["estimated_loss_value"],
+                    2
+                )
+
+            return [
+
+                {
+                    "time": (
+                        now + timedelta(minutes=15)
+                    ).strftime("%H:%M"),
+                    "eta": 15,
+                    "stage": "Containment Successful",
+                    "reason": "No further attack stages predicted.",
+                    "affected_services": 0,
+                    "estimated_loss": current_loss
+                },
+
+                {
+                    "time": (
+                        now + timedelta(minutes=30)
+                    ).strftime("%H:%M"),
+                    "eta": 30,
+                    "stage": "Recovery Started",
+                    "reason": "Recovery operations are underway.",
+                    "affected_services": 0,
+                    "estimated_loss": current_loss
+                },
+
+                {
+                    "time": (
+                        now + timedelta(minutes=45)
+                    ).strftime("%H:%M"),
+                    "eta": 45,
+                    "stage": "Business Services Restored",
+                    "reason": "Critical services restored.",
+                    "affected_services": 0,
+                    "estimated_loss": current_loss
+                },
+
+                {
+                    "time": (
+                        now + timedelta(minutes=60)
+                    ).strftime("%H:%M"),
+                    "eta": 60,
+                    "stage": "Incident Closed",
+                    "reason": "Recovery completed.",
+                    "affected_services": 0,
+                    "estimated_loss": current_loss
+                }
+
+            ]
 
         reasons = {
 

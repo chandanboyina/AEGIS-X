@@ -1,4 +1,5 @@
 from core.brain_service import brain
+from agents.risk.enterprise_risk_vote import EnterpriseRiskVote
 
 
 class RiskVote:
@@ -12,130 +13,45 @@ class RiskVote:
     def vote(
         self,
         incident,
-        enterprise_risk
+        strategies
     ):
 
-        playbooks = brain.get_playbook_templates(
-            incident
-        )
+        engine = EnterpriseRiskVote()
 
-        if not playbooks:
+        proposals = engine.evaluate_strategies(
 
-            return {
+            incident,
 
-                "agent": "Enterprise Risk",
-
-                "recommendation": "None",
-
-                "confidence": 0,
-
-                "weight": 0.05,
-
-                "reason": [
-
-                    "No playbooks available."
-
-                ],
-
-                "evidence": {}
-
-            }
-
-        current_risk = enterprise_risk["enterprise_score"]
-
-        best = None
-        best_risk = float("inf")
-
-        for playbook in playbooks:
-
-            actions = playbook.get(
-                "actions",
-                {}
-            )
-
-            isolated = len(
-                actions.get(
-                    "isolate",
-                    []
-                )
-            )
-
-            protected = len(
-                actions.get(
-                    "protect",
-                    []
-                )
-            )
-
-            blocked = len(
-                actions.get(
-                    "block",
-                    []
-                )
-            )
-
-            reduction = (
-
-                isolated * 8 +
-
-                protected * 5 +
-
-                blocked * 6
-
-            )
-
-            predicted_risk = max(
-
-                0,
-
-                current_risk - reduction
-
-            )
-
-            if predicted_risk < best_risk:
-
-                best_risk = predicted_risk
-
-                best = playbook
-
-        confidence = round(
-
-            100 -
-
-            (best_risk / max(current_risk, 1)) * 60
+            strategies
 
         )
 
-        confidence = max(
-            20,
-            min(
-                confidence,
-                95
-            )
-        )
+        best = proposals[0]
 
         return {
 
-            "agent": "Enterprise Risk",
+            "agent":"Enterprise Risk",
 
-            "recommendation": best["id"],
+            "recommendation":
 
-            "confidence": confidence,
+                best.playbook,
 
-            "weight": 0.05,
+            "confidence":
 
-            "reason": [
+                best.confidence,
 
-                f"Predicted enterprise risk {best_risk}/100.",
+            "weight":0.05,
 
-                "Selected playbook minimizes enterprise risk."
+            "reason":[
+
+                f"Predicted enterprise risk score {best.score}.",
+
+                "Selected lowest enterprise-wide risk."
 
             ],
 
-            "evidence": {
+            "proposal":best,
 
-                "risk": best_risk
-
-            }
+            "alternatives":proposals[1:4]
 
         }

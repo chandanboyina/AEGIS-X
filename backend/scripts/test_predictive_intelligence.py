@@ -2,13 +2,15 @@ from simulation.enterprise_pipeline import EnterprisePipeline
 from agents.oracle.oracle_agent import OracleAgent
 from agents.sentinel.sentinel_agent import SentinelAgent
 from agents.incident_manager.incident_manager import IncidentManager
-import pprint
+from pprint import pprint
+from agents.predictive.predictive_vote import PredictiveVote
 
 pipeline = EnterprisePipeline()
 
 oracle = OracleAgent()
 sentinel = SentinelAgent()
 manager = IncidentManager()
+vote = PredictiveVote()
 
 for packet in pipeline.run_live():
 
@@ -21,7 +23,37 @@ for packet in pipeline.run_live():
 
     packet = manager.create(packet)
 
-    strategic = packet["incident"]["commander"]["strategic_analysis"]
+    print("="*80)
+    print("COMMANDER OBJECT")
+    print("="*80)
+
+    pprint(packet["incident"]["commander"])
+
+    exit()
+
+    commander = packet["incident"]["commander"]
+
+    prediction = commander["prediction"]
+
+    strategies = prediction["strategies"]
+
+    best = prediction["recommended"]
+
+    timeline = prediction["timeline"]
+
+    commander = packet["incident"]["commander"]
+
+    prediction = commander["prediction"]
+
+    
+
+    proposals = vote.evaluate_strategies(
+
+        packet["incident"],
+
+        prediction["strategies"]
+
+    )
 
     print()
     print("=" * 70)
@@ -29,9 +61,13 @@ for packet in pipeline.run_live():
     print("=" * 70)
 
 
-    for option in strategic["strategies"]:
+    for option in prediction["strategies"]:
 
-        print(f"Playbook : {option['playbook']}")
+        pb = option["playbook"]
+
+        print(f"Playbook : {pb['id']}")
+        print(f"Name     : {pb['name']}")
+        print(f"Strategy : {option['strategy']}")
 
         print("----------------------------------------")
 
@@ -75,14 +111,33 @@ for packet in pipeline.run_live():
 
         print()
 
-    best = strategic["recommended"]
+    best = prediction["recommended"]
+
+    print()
+    print("=" * 70)
+    print("PREDICTIVE AI VOTE")
+    print("=" * 70)
+
+    for proposal in proposals:
+
+        print(
+            f"{proposal.playbook:<25} "
+            f"{proposal.score}"
+        )
+
+
+
+    pb = best["playbook"]
 
     print()
     print("=" * 70)
     print("RECOMMENDED PLAYBOOK")
     print("=" * 70)
 
-    print(f"Playbook            : {best['playbook']}")
+    print(f"Playbook            : {pb['id']}")
+    print(f"Name                : {pb['name']}")
+    print(f"Strategy            : {best['strategy']}")
+
     print(f"Historical Success  : {best['success_probability']}%")
     print(f"Confidence          : {best['confidence']}%")
     print(f"Estimated Loss      : ₹{best['estimated_loss']} Cr")
@@ -103,7 +158,9 @@ for packet in pipeline.run_live():
     print("=" * 70)
     print("NEXT HOURS PREDICTION")
     print("=" * 70)
-    for point in strategic["timeline"]:
+    timeline = prediction["timeline"]
+
+    for point in timeline:
 
         print()
         print(f"+{point['eta']} Minutes")

@@ -232,6 +232,64 @@
     }
   ],
 
+    "Execution": [
+
+        {
+
+            "id": "PB-022",
+
+            "name": "PowerShell Execution Investigation",
+
+            "steps": [
+
+                "Collect PowerShell logs",
+
+                "Extract ScriptBlock logging",
+
+                "Review executed commands",
+
+                "Validate parent process",
+
+                "Search persistence",
+
+                "Check Defender detections",
+
+                "Collect forensic evidence"
+
+            ],
+
+            "actions": {
+
+                "isolate": [
+
+                    "ENDPOINT"
+
+                ],
+
+                "protect": [
+
+                    "POWERSHELL",
+
+                    "EDR"
+
+                ],
+
+                "block": [
+
+                    "Execution",
+
+                    "PowerShell",
+
+                    "Defense Evasion"
+
+                ]
+
+            }
+
+        }
+
+    ],
+
   "Malware": [
     {
       "id": "PB-021",

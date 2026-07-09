@@ -85,52 +85,77 @@ class SentinelAgent:
 
         })
 
+        if "incident" in packet:
+
+            packet["incident"]["response"] = response
+
         return packet
     
     def vote(self, incident):
 
         response = incident["response"]
 
+        recommendation = response["playbook"]
+
+        commander = incident.get(
+            "commander",
+            {}
+        )
+
+        recommended = commander.get(
+            "recommended_playbook"
+        )
+
+        if isinstance(recommended, dict):
+
+            recommendation = recommended.get(
+
+                "candidate_id",
+
+                recommendation
+
+            )
+
         return {
 
             "agent": "Sentinel",
 
-            "recommendation":
+            "recommendation": recommendation,
 
-                response["action"],
+            "confidence": response.get(
 
-            "confidence":
+                "confidence",
 
-                response.get(
+                90
 
-                    "confidence",
-
-                    90
-
-                ),
+            ),
 
             "weight": 0.15,
 
-            "reason": [
+            "reason": response.get(
 
-                response["reason"]
+                "reasoning",
 
-            ],
+                ["No reasoning available."]
+
+            ),
 
             "evidence": {
 
-                "playbook":
+                "playbook": response.get(
 
-                    response.get(
+                    "playbook"
 
-                        "playbook"
+                ),
 
-                    )
+                "action": response.get(
+
+                    "action"
+
+                )
 
             },
 
-            "timestamp":
-
-                incident["timestamp"]
+            "timestamp": incident["created"]
 
         }

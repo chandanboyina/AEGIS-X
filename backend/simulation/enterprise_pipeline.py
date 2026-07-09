@@ -8,6 +8,24 @@ from agents.observer.observer_agent import ObserverAgent
 from simulation.enterprise_statistics import EnterpriseStatistics
 from agents.oracle.oracle_agent import OracleAgent
 
+from agents.ueba.ai_behavior_engine import AIBehaviorEngine
+
+from agents.correlation.enterprise_intelligence_builder import EnterpriseIntelligenceBuilder
+
+from agents.knowledge_graph.enterprise_brain import EnterpriseCyberBrain
+
+from agents.cyber_dna.cyber_dna import CyberDNA
+
+from agents.digital_twin.digital_twin import CyberDigitalTwin
+
+from agents.commander.commander_ai import CommanderAI
+
+from agents.council.debate_engine import DebateEngine
+
+from agents.sentinel.sentinel_agent import SentinelAgent
+
+from agents.ueba.current_activity_builder import CurrentActivityBuilder
+
 
 class EnterprisePipeline:
     """
@@ -39,7 +57,23 @@ class EnterprisePipeline:
 
         self.statistics = EnterpriseStatistics()
 
-    def process_event(self, event: dict):
+        self.behavior = AIBehaviorEngine()
+
+        self.correlation = EnterpriseIntelligenceBuilder()
+
+        self.brain = EnterpriseCyberBrain()
+
+        self.cyber_dna = CyberDNA()
+
+        self.commander = CommanderAI()
+
+        self.council = DebateEngine()
+
+        self.sentinel = SentinelAgent()
+
+        self.activity = CurrentActivityBuilder()
+
+    def process_event(self, event, snapshot):
 
         """
         Process one enterprise event.
@@ -81,12 +115,66 @@ class EnterprisePipeline:
         )
 
         # -----------------------------
+        # Behavior AI
+        # -----------------------------
+
+        packet["behavior"] = self.behavior.analyze(
+            event,
+            snapshot
+        )
+
+        # -----------------------------
+        # Enterprise Correlation
+        # -----------------------------
+
+        packet["correlation"] = self.correlation.build(
+            [packet]
+        )
+
+        # -----------------------------
+        # Enterprise Brain
+        # -----------------------------
+
+        
+
+        #packet["brain"] = {
+
+        #    "history":
+
+        #        self.brain.attack_history(
+
+        #            packet["asset"]["hostname"]
+
+        #        ),
+        #    "similar":
+
+        #        self.brain.find_similar(
+
+        #            packet
+
+        #        )
+        #}
+
+        # -----------------------------
+        # Cyber DNA
+        # -----------------------------
+
+        #packet["cyber_dna"] = self.cyber_dna.build(
+        #    packet
+        #)
+
+
+        # -----------------------------
         # Oracle AI
         # -----------------------------
 
-        packet = self.oracle.investigate(
-            packet
-        )
+        #
+        # Oracle AI will execute later,
+        # after all enterprise intelligence
+        # has been generated.
+        #
+
+        #self.brain.remember(packet)
 
         return packet
     def run(self):
@@ -95,13 +183,16 @@ class EnterprisePipeline:
         Process one complete enterprise stream.
         """
 
-        packets = []
 
         events = self.stream.generate_stream()
 
+        snapshot = self.activity.build(events)
+
+        packets = []
+
         for event in events:
 
-            packet = self.process_event(event)
+            packet = self.process_event(event, snapshot)
 
             packets.append(packet)
 
@@ -115,9 +206,14 @@ class EnterprisePipeline:
 
         events = self.stream.generate_stream()
 
+        snapshot = self.activity.build(events)
+
         for event in events:
 
-            yield self.process_event(event)
+            yield self.process_event(
+                event,
+                snapshot
+            )
 
     def generate_statistics(self, packets):
 

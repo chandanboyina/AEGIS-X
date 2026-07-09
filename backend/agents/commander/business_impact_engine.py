@@ -31,7 +31,7 @@ class BusinessImpactEngine:
         # ----------------------------------------
 
         profile = self.inventory.get(
-            incident["asset"]
+            incident["asset"]["hostname"]
         )
 
         service = profile["service"]

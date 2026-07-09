@@ -123,13 +123,101 @@ class SentinelDecision:
 
             priority = "CRITICAL"
 
+        reason_parts = []
+
+        reason_parts.append(
+
+            f"Oracle classified the incident as {category}."
+
+        )
+
+        reason_parts.append(
+
+            f"Threat level assessed as {threat}."
+
+        )
+
+        reason_parts.append(
+
+            f"Recommended action: {action}."
+
+        )
+
+        reason_parts.append(
+
+            f"Playbook: {playbook['name']}."
+
+        )
+
+        reason_parts.append(
+
+            f"Business impact: {impact['impact']}."
+
+        )
+
+        containment_actions = []
+
+        if containment["block_ip"]:
+            containment_actions.append("Blocked malicious IP")
+
+        if containment["lock_account"]:
+            containment_actions.append("Locked compromised account")
+
+        if containment["isolate_host"]:
+            containment_actions.append("Isolated affected host")
+
+        if containment["collect_memory"]:
+            containment_actions.append("Memory acquisition scheduled")
+
+        if containment["collect_disk"]:
+            containment_actions.append("Disk acquisition scheduled")
+
+        if containment["disable_shares"]:
+            containment_actions.append("Disabled network shares")
+
+        if containment_actions:
+
+            reason_parts.append(
+
+                "Containment actions: "
+
+                + ", ".join(containment_actions)
+
+                + "."
+
+            )
+
+        else:
+
+            reason_parts.append(
+
+                "No containment action required."
+
+            )
+
+        reasoning = reason_parts
+
         return {
 
             "action": action,
 
             "priority": priority,
 
-            "playbook": playbook["name"],
+            "confidence": self.calculate_confidence(
+
+                threat,
+
+                priority
+
+            ),
+
+            "reasoning": reasoning,
+
+            #"playbook": playbook["name"],
+
+            "playbook": playbook["id"],
+
+            "playbook_name": playbook["name"],
 
             "playbook_actions": playbook["actions"],
 
@@ -151,3 +239,38 @@ class SentinelDecision:
             "threat_level": threat,
 
         }
+    
+    def calculate_confidence(
+
+        self,
+
+        threat,
+
+        priority
+
+    ):
+
+        score = 70
+
+        if priority == "MEDIUM":
+
+            score += 10
+
+        elif priority == "HIGH":
+
+            score += 18
+
+        elif priority == "CRITICAL":
+
+            score += 25
+
+        if threat == "High":
+
+            score += 5
+
+        elif threat == "Critical":
+
+            score += 10
+
+        return min(score, 99)
+    

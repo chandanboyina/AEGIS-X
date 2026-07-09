@@ -48,7 +48,7 @@ class HuntSummary:
 
         for incident in matches:
 
-            assets.add(incident["asset"])
+            assets.add(incident["asset"]["hostname"])
 
             if incident["investigation_summary"]["affected_users"]:
 

@@ -1,0 +1,23 @@
+[
+    {
+        "id": "CERTIN-2024-001",
+        "title": "Credential Dumping Campaign",
+        "severity": "High",
+        "mitre": "T1003",
+        "affected": [
+            "Windows",
+            "Active Directory"
+        ],
+        "advisory": "Organizations should monitor LSASS access and enable Credential Guard."
+    },
+    {
+        "id": "CERTIN-2024-002",
+        "title": "Exchange Server Exploitation",
+        "severity": "Critical",
+        "mitre": "T1190",
+        "affected": [
+            "Exchange Server"
+        ],
+        "advisory": "Apply latest Microsoft patches immediately."
+    }
+]

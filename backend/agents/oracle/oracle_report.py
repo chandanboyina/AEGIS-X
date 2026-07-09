@@ -54,6 +54,26 @@ class OracleReport:
 
                     oracle["mitre"]["tactic"],
 
+                "overall_risk":
+
+                    oracle.get(
+
+                        "overall_risk",
+
+                        0
+
+                    ),
+
+                "recommended_action":
+
+                    oracle.get(
+
+                        "recommended_action",
+
+                        "Monitor"
+
+                    ),
+
             },
 
             "reasoning":

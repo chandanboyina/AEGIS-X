@@ -47,20 +47,78 @@ class EnterpriseRiskEngine:
         )
 
         # -----------------------------
+        # Threat Intelligence
+        # -----------------------------
+
+        threat = incident.get(
+            "intelligence",
+            {}
+
+        ).get(
+            "threat",
+            {}
+        )
+
+        correlation = threat.get(
+            "score",
+            0
+        )
+
+        intel = threat.get(
+            "intelligence",
+            {}
+        )
+
+        cves = intel.get(
+            "cves",
+            []
+        )
+
+        certin = intel.get(
+            "certin",
+            []
+        )
+
+        cisa = intel.get(
+            "cisa",
+            []
+        )
+
+        vendor = intel.get(
+            "vendor",
+            []
+        )
+
+        exploitdb = intel.get(
+            "exploitdb",
+            []
+        )
+
+        # -----------------------------
         # Enterprise Risk Calculation
         # -----------------------------
 
         enterprise_score = (
 
-            observer * 0.30 +
+            observer * 0.25 +
 
-            mitre * 0.20 +
+            mitre * 0.15 +
 
-            investigation * 0.20 +
+            investigation * 0.15 +
 
-            ioc_density * 0.15 +
+            ioc_density * 0.10 +
 
-            severity * 0.15
+            severity * 0.10 +
+
+            correlation * 0.15 +
+
+            (100 if exploitdb else 0) * 0.05 +
+
+            (100 if cisa else 0) * 0.03 +
+
+            (100 if certin else 0) * 0.01 +
+
+            (100 if vendor else 0) * 0.01
 
         )
 
@@ -92,7 +150,19 @@ class EnterpriseRiskEngine:
 
                 "ioc_density": ioc_density,
 
-                "severity": severity
+                "severity": severity,
+
+                "correlation": correlation,
+
+                "cves": len(cves),
+
+                "certin": len(certin),
+
+                "cisa": len(cisa),
+
+                "vendor": len(vendor),
+
+                "exploitdb": len(exploitdb)
 
             }
 
@@ -116,9 +186,13 @@ class EnterpriseRiskEngine:
 
             "reason": [
 
-                f"Enterprise Risk "
+                f"Enterprise Risk {enterprise['enterprise_score']}/100.",
 
-                f"{enterprise['enterprise_score']}/100"
+                f"Threat Correlation {enterprise['breakdown']['correlation']}/100.",
+
+                f"{enterprise['breakdown']['exploitdb']} public exploit(s) available.",
+
+                f"{enterprise['breakdown']['cisa']} CISA KEV advisory matched."
 
             ],
 

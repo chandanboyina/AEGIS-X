@@ -1,42 +1,84 @@
+from datetime import datetime
+
+
 class CollectorMetrics:
     """
-    Enterprise Collector Metrics.
+    Tracks runtime statistics for every collector.
     """
 
     def __init__(self):
 
-        self.events = 0
+        self.metrics = {}
 
-        self.errors = 0
+    def update(
+        self,
+        collector_name,
+        events,
+        latency,
+        success=True
 
-        self.normalized = 0
+    ):
 
-    def event_received(self):
+        metric = self.metrics.setdefault(
 
-        self.events += 1
+            collector_name,
 
-    def normalized_event(self):
+            {
 
-        self.normalized += 1
+                "events":0,
 
-    def error(self):
+                "runs":0,
 
-        self.errors += 1
+                "failed_runs":0,
 
-    def report(self):
+                "last_latency":0,
 
-        return {
+                "average_latency":0,
 
-            "events_received":
+                "last_collection":None
 
-                self.events,
+            }
 
-            "normalized_events":
+        )
 
-                self.normalized,
+        metric["runs"] += 1
 
-            "errors":
+        if success:
 
-                self.errors
+            metric["events"] += events
 
-        }
+        else:
+
+            metric["failed_runs"] += 1
+
+        metric["last_latency"] = latency
+
+        metric["average_latency"] = round(
+
+            (
+
+                metric["average_latency"]
+
+                *
+
+                (metric["runs"]-1)
+
+                +
+
+                latency
+
+            )
+
+            /
+
+            metric["runs"],
+
+            2
+
+        )
+
+        metric["last_collection"] = datetime.now().isoformat()
+
+    def get(self):
+
+        return self.metrics
