@@ -1,13 +1,12 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from config.config import settings
-
 from database.base import Base
 from database.database import engine
-
+import asyncio
+from background.pipeline_runner import runner
+from api.dashboard_routes import register_dashboard_routes
 import models
 
 #from api.routes import health_router
@@ -27,6 +26,10 @@ async def lifespan(app: FastAPI):
 
     print("✓ Database initialized successfully.")
     print("✓ AEGIS-X Backend Started.")
+
+    asyncio.create_task(
+        runner.start()
+    )
 
     yield
 
@@ -57,6 +60,7 @@ app.include_router(assets_router)
 
 app.include_router(events_router)
 
+register_dashboard_routes(app)
 
 
 

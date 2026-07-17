@@ -11,7 +11,10 @@ class PacketSerializer:
 
         return {
 
-            # Enterprise metadata
+            # -------------------------
+            # Enterprise
+            # -------------------------
+
             "metadata": packet.get("metadata"),
 
             "pipeline": packet.get("pipeline"),
@@ -20,7 +23,10 @@ class PacketSerializer:
 
             "enterprise": packet.get("enterprise"),
 
-            # Core AI
+            # -------------------------
+            # AI Engines
+            # -------------------------
+
             "observer": packet.get("observer"),
 
             "behavior": packet.get("behavior"),
@@ -31,15 +37,57 @@ class PacketSerializer:
 
             "sentinel": packet.get("sentinel"),
 
+            # -------------------------
+            # Incident
+            # -------------------------
+
             "incident": packet.get("incident"),
 
-            # Intelligence
+            # -------------------------
+            # Commander
+            # -------------------------
+
+            "commander":
+
+                packet.get(
+                    "incident",
+                    {}
+                ).get(
+                    "commander",
+                    {}
+                ),
+
+            # -------------------------
+            # AI Council
+            # -------------------------
+
+            "council":
+
+                packet.get(
+                    "incident",
+                    {}
+                ).get(
+                    "council",
+                    {}
+                ),
+
+            # -------------------------
+            # Enterprise Intelligence
+            # -------------------------
+
             "brain": packet.get("brain"),
 
             "cyber_dna": packet.get("cyber_dna"),
 
             "digital_twin": packet.get("digital_twin"),
 
+            # -------------------------
             # Audit
-            "audit": packet.get("audit", [])
+            # -------------------------
+
+            "audit": packet.get(
+                "audit",
+                []
+            )
+
         }

@@ -1,19 +1,9 @@
+from pprint import pprint
+
 from services.dashboard_service import DashboardService
 
 service = DashboardService()
 
-packet = service.latest_packet()
+dashboard = service.dashboard()
 
-print(packet.keys())
-
-print()
-
-print(packet["pipeline"])
-
-print()
-
-print(packet["trace"])
-
-print()
-
-print(packet["incident"]["incident_id"])
+pprint(dashboard)

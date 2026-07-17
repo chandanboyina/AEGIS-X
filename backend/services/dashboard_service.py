@@ -1,8 +1,15 @@
 from simulation.enterprise_pipeline import EnterprisePipeline
 from api.packet_serializer import PacketSerializer
+from core.packet_cache import packet_cache
 
 
 class DashboardService:
+    """
+    Enterprise Dashboard Service.
+
+    Produces the latest enterprise packet
+    for the frontend.
+    """
 
     def __init__(self):
 
@@ -12,11 +19,29 @@ class DashboardService:
 
     def latest_packet(self):
 
-        for packet in self.pipeline.run_live():
+        packet = packet_cache.get()
 
-            if not packet.get("completed"):
-                continue
+        #
+        # First request after backend startup
+        #
 
-            return self.serializer.serialize(packet)
+        if packet is None:
 
-        return None
+            for packet in self.pipeline.run_live():
+
+                if packet.get("completed"):
+
+                    break
+
+            packet = packet_cache.get()
+
+        return self.serializer.serialize(packet)
+
+    def dashboard(self):
+
+        packet = self.latest_packet()
+
+        if packet is None:
+            return None
+
+        return self.serializer.serialize(packet)

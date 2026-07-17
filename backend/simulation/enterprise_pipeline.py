@@ -30,6 +30,8 @@ from agents.ueba.current_activity_builder import CurrentActivityBuilder
 
 from agents.incident_manager.incident_manager import IncidentManager
 
+from core.packet_cache import packet_cache
+
 
 class EnterprisePipeline:
     """
@@ -219,8 +221,12 @@ class EnterprisePipeline:
 
         }
 
-        
-        
+        # -------------------------------------
+        # Update latest enterprise packet
+        # -------------------------------------
+
+        packet_cache.set(packet)
+
         return packet
     def run(self):
 

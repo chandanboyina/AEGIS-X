@@ -1,0 +1,9 @@
+antd
+axios
+react-router-dom
+zustand
+framer-motion
+recharts
+react-icons
+@ant-design/icons
+@xyflow/react

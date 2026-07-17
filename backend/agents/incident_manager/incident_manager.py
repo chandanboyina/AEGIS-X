@@ -474,6 +474,12 @@ class IncidentManager:
 
         incident = packet["incident"]
 
+        # ----------------------------------------
+        # Commander AI Council Summary
+        # ----------------------------------------
+
+        incident["council"] = incident["commander"]["ai_council"]
+
 
 
         
@@ -541,11 +547,7 @@ class IncidentManager:
         print("===========================\n")
 
 
-        incident["council"] = self.council.debate(
-
-            votes
-
-        )
+        incident["council_debate"] = self.council.debate(votes)
         
 
         
