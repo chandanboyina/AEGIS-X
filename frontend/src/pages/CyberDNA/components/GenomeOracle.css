@@ -1,0 +1,288 @@
+/* ===========================================================
+   GENOME ORACLE CONFIG SYSTEM
+=========================================================== */
+.genomeOracle {
+    position: relative;
+    width: 100%;
+    padding: 24px;
+    border-radius: 24px;
+    background: radial-gradient(circle at top, #17324d 0%, #0c1723 45%, #081018 100%);
+}
+
+.oracleCaption {
+    color: #00E5FF;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.oracleTitle {
+    margin-top: 8px;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.oracleSubtitle {
+    max-width: 760px;
+    color: #9FB6CC;
+    font-size: 15px;
+    line-height: 28px;
+}
+
+/* ===========================================================
+   WORKSPACE FLEX-GRID FLOW ARCHITECTURE
+=========================================================== */
+.oracleDashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 36px;
+}
+
+/* ===========================================================
+   TOP TIER DISPLAY RACK (Radar Engine + Telemetry Summary)
+=========================================================== */
+.oracleTopTierLayout {
+    display: grid;
+    grid-template-columns: 320px 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.oracleCorePanel {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 20px;
+}
+
+.oracleGlow {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,255,.2), rgba(123,97,255,.06), transparent 70%);
+    filter: blur(25px);
+    animation: oraclePulse 4s ease-in-out infinite;
+}
+
+.oracleCore {
+    position: relative;
+    width: 180px; height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oracleCenter {
+    position: absolute;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, rgba(15,30,45,.98), rgba(8,15,22,.98));
+    border: 1px solid rgba(0,229,255,.25);
+    box-shadow: 0 0 30px rgba(0,229,255,.15), inset 0 0 15px rgba(255,255,255,.04);
+}
+
+.oracleRobot { color: #00E5FF; font-size: 28px; margin-bottom: 4px; }
+.oracleConfidence { color: #FFFFFF; font-size: 28px; font-weight: 800; line-height: 1; }
+.oracleConfidenceLabel { margin-top: 4px; color: #91A8C1; font-size: 11px; text-transform: uppercase; }
+
+.oracleRing {
+    position: absolute;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 229, 255, 0.15);
+    animation: ringRotate 18s linear infinite;
+}
+.oracleRing.second { width: 190px; height: 190px; border-style: dashed; border-color: rgba(123,97,255,.18); animation-duration: 26s; animation-direction: reverse; }
+.oracleRing.third { width: 220px; height: 220px; border: 1px solid rgba(255,255,255,.05); animation-duration: 34s; }
+
+/* HEALTH DOCK COMPONENT */
+.enterpriseHealth {
+    background: rgba(14,25,39,.94);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 20px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.healthHeader { display: flex; align-items: center; gap: 10px; color: #00E5FF; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
+.healthScore { color: #FFFFFF; font-size: 40px; font-weight: 800; line-height: 1; margin-bottom: 14px; }
+.healthStatus { margin-top: 14px; color: #91AAC1; font-size: 13px; line-height: 20px; }
+
+/* REASONING STEPS VERTICAL FLOW */
+.reasoningEngine {
+    background: rgba(14,25,39,.94);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 20px;
+    padding: 20px;
+}
+.reasoningHeader { display: flex; align-items: center; gap: 10px; color: #00E5FF; font-weight: 700; font-size: 14px; margin-bottom: 16px; }
+.reasoningStepsStack { display: flex; flex-direction: column; gap: 10px; }
+.reasoningStep { display: flex; align-items: flex-start; gap: 12px; }
+.reasonIcon { font-size: 16px; margin-top: 3px; }
+.reasonIcon.success { color: #00E676; }
+.reasonTitle { color: #FFFFFF; font-size: 13px; font-weight: 600; }
+.reasonText { color: #8EA8C2; font-size: 11px; margin-top: 2px; }
+
+/* ===========================================================
+   INTERMEDIARY INFRASTRUCTURE METRIC TIERS
+=========================================================== */
+.oracleMetrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.oracleMetric {
+    background: rgba(14,25,39,.94);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,.2);
+}
+.metricNumber { color: #FFFFFF; font-size: 28px; font-weight: 800; }
+.metricText { color: #91AAC2; font-size: 12px; margin-top: 4px; }
+
+/* ===========================================================
+   MAIN CONTENT SPLIT GRID PANEL STACKS
+=========================================================== */
+.oracleMainGrid {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    gap: 24px;
+    align-items: start;
+}
+
+.oracleGridLeftColumn, .oracleGridRightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* LEFT COLUMN CARD DATA OVERLAYS */
+.oracleInsights {
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(13,24,38,.94);
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+.insightHeader { display: flex; align-items: center; gap: 10px; color: #00E5FF; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+.insightCardsWrapper { display: flex; flex-direction: column; gap: 16px; }
+.insightCard { padding: 16px; border-radius: 14px; background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04); }
+.insightTop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.insightTitle { color: #FFFFFF; font-size: 15px; font-weight: 600; }
+.insightDescription { color: #A9BED1; font-size: 13px; line-height: 22px; margin-bottom: 12px; }
+.insightProgress { display: flex; align-items: center; justify-content: space-between; color: #8FA7BE; font-size: 12px; gap: 16px; }
+.insightProgress .ant-progress { flex: 1; max-width: 140px; margin: 0; }
+
+.oracleExplanation {
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(13,24,38,.94);
+    border: 1px solid rgba(255,255,255,.06);
+}
+.explanationHeader { color: #00E5FF; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.explanationText { color: #A9BED1; line-height: 24px; font-size: 14px; margin-bottom: 10px; }
+.explanationText.secondaryText { margin-bottom: 0; color: #8AA4BC; }
+
+/* RIGHT COLUMN ACTIONS DOCK PANELS */
+.recommendedActions { display: flex; flex-direction: column; gap: 16px; }
+.actionsHeader { display: flex; align-items: center; gap: 10px; color: #00E676; font-size: 15px; font-weight: 700; }
+
+.actionCard {
+    background: rgba(14,25,39,.94);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.2);
+}
+.actionPriority { display: inline-flex; padding: 4px 10px; border-radius: 99px; background: rgba(255,82,82,.15); color: #FF5252; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+.actionPriority.medium { background: rgba(255,193,7,.15); color: #FFC107; }
+.actionTitle { color: #FFFFFF; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.actionDescription { color: #9DB4CA; line-height: 22px; font-size: 13px; }
+
+/* GEOGRAPHIC COMPONENT POSITIONS GRID */
+.securityPosture { padding: 22px; border-radius: 20px; background: rgba(13,24,38,.94); border: 1px solid rgba(255,255,255,.06); }
+.postureHeader { color: #00E5FF; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+.postureGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.postureCard { background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04); border-radius: 14px; padding: 14px; text-align: center; }
+.postureValue { color: #00E676; font-size: 24px; font-weight: 800; }
+.postureLabel { color: #8FA7BE; font-size: 12px; margin-top: 4px; }
+
+/* ===========================================================
+   BOTTOM FINISH TIERS & SCOREBOARDS
+=========================================================== */
+.oracleSummary {
+    background: rgba(13,24,38,.94);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 20px;
+    padding: 24px;
+}
+.summaryTitle { color: #00E5FF; font-size: 14px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
+.summaryMessage { color: #A9BED1; line-height: 24px; font-size: 14px; }
+.summaryFooter { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.summaryStatus { display: flex; align-items: center; gap: 8px; color: #E6EEF8; font-size: 13px; }
+.summaryStatus svg { color: #00E676; }
+
+.oracleScoreboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.scoreCard { background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.05); border-radius: 16px; padding: 18px; text-align: center; }
+.scoreValue { color: #00E5FF; font-size: 26px; font-weight: 800; }
+.scoreLabel { margin-top: 4px; color: #91AAC1; font-size: 12px; }
+
+/* ===========================================================
+   ANIMATION MATRIX LOGIC ENGINE
+=========================================================== */
+@keyframes ringRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes oraclePulse { 0%, 100% { transform: scale(1); opacity: .45; } 50% { transform: scale(1.06); opacity: .8; } }
+@keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.oracleMetric, .insightCard, .actionCard, .postureCard, .scoreCard {
+    animation: floatCard 6s ease-in-out infinite;
+}
+.oracleMetric:nth-child(2), .insightCard:nth-child(2), .actionCard:nth-child(2), .scoreCard:nth-child(2) { animation-delay: 1s; }
+.oracleMetric:nth-child(3), .scoreCard:nth-child(3) { animation-delay: 2s; }
+.oracleMetric:nth-child(4), .scoreCard:nth-child(4) { animation-delay: 3s; }
+
+.enterpriseHealth, .reasoningEngine, .oracleMetric, .oracleInsights, .actionCard, .securityPosture, .oracleSummary, .scoreCard {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+/* ===========================================================
+   RESPONSIVE LAYOUT CONSTRAINTS
+=========================================================== */
+@media (max-width: 1400px) {
+    .oracleTopTierLayout { grid-template-columns: 1fr; }
+    .oracleCorePanel { height: 220px; }
+    .oracleMetrics, .oracleScoreboard { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1100px) {
+    .oracleMainGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    .oracleMetrics, .postureGrid, .oracleScoreboard { grid-template-columns: 1fr; }
+    .summaryFooter { flex-direction: column; gap: 12px; }
+    .oracleTitle { font-size: 26px; }
+}

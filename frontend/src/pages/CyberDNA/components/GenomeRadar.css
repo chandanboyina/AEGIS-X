@@ -1,0 +1,372 @@
+/* ===========================================================
+   GENOME RADAR CONTENT LAYOUT
+=========================================================== */
+.genomeRadar {
+    position: relative;
+    width: 100%;
+}
+
+.radarCaption {
+    color: #00E5FF;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.radarTitle {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    color: #FFFFFF;
+    font-size: 38px;
+    font-weight: 800;
+}
+
+.radarSubtitle {
+    max-width: 720px;
+    color: #9CB3C7;
+    line-height: 28px;
+    font-size: 15px;
+}
+
+.radarContent {
+    margin-top: 30px;
+}
+
+/* ===========================================================
+   RADAR WORKSPACE MATRIX PANEL
+=========================================================== */
+.radarCanvas {
+    position: relative;
+    height: 700px; /* Enhanced height for clear dynamic layouts */
+    border-radius: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #16263B 0%, #0E1725 70%, #071019 100%);
+    border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.radarGrid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: .4;
+    z-index: 1;
+}
+
+.radarGlow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .2;
+    z-index: 1;
+}
+.radarGlow1 { width: 350px; height: 350px; background: #00E5FF; top: -100px; left: -100px; }
+.radarGlow2 { width: 350px; height: 350px; background: #00E676; right: -100px; bottom: -100px; }
+
+/* ===========================================================
+   VECTOR MATH RADAR MAP & LINES
+=========================================================== */
+.radarSvg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.radarRing {
+    fill: none;
+    stroke: rgba(0, 229, 255, .14);
+    stroke-width: 1.5;
+}
+
+.radarAxis {
+    stroke: rgba(255, 255, 255, .05);
+    stroke-width: 1;
+}
+
+/* ===========================================================
+   SWEEPER EMISSION EFFECTS
+=========================================================== */
+.radarSweepContainer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 720px;
+    height: 720px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: .25;
+    z-index: 3;
+}
+
+.radarSweepBeam {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(transparent 0deg, transparent 280deg, rgba(0, 229, 255, .6) 330deg, rgba(0, 229, 255, .1) 360deg);
+    animation: radarRotate 6s linear infinite;
+}
+
+/* ===========================================================
+   INTERACTIVE THREAT VISUALIZATIONS
+=========================================================== */
+.threatLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+.threatPoint {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 12;
+}
+
+.threatDot {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 5;
+    animation: threatBlink 2s infinite ease-in-out;
+}
+
+.threatPulse {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: threatPulse 2.5s infinite cubic-bezier(0.25, 0, 0, 1);
+}
+
+/* ===========================================================
+   DOCKABLE HOVER TOOLTIPS
+=========================================================== */
+.threatTooltip {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    min-width: 140px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(9, 18, 28, 0.95);
+    border: 1px solid rgba(255, 255, 255, .1);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+    z-index: 100;
+    text-align: center;
+}
+
+.threatPoint:hover .threatTooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltipCountry { color: #FFFFFF; font-size: 13px; font-weight: 700; }
+.tooltipSeverity { margin-top: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ===========================================================
+   CENTRAL MONITOR SCORE DOCK
+=========================================================== */
+.radarCenter {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 200px; height: 200px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.radarCore {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(11, 22, 36, 0.96);
+    border: 2px solid rgba(0, 229, 255, .4);
+    box-shadow: inset 0 0 25px rgba(255, 255, 255, .05), 0 0 40px rgba(0, 229, 255, .15);
+    z-index: 25;
+}
+
+.coreRadarIcon { font-size: 34px; color: #00E5FF; margin-bottom: 6px; }
+.coreRadarScore { color: white; font-size: 32px; font-weight: 800; line-height: 1; }
+.coreRadarLabel { margin-top: 4px; margin-bottom: 10px; color: #8EA7BD; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.radarCore .ant-progress { width: 80%; }
+
+.radarPulse {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 160px; height: 160px;
+    transform: translate(-50%, -50%) scale(0.5);
+    border-radius: 50%;
+    border: 1px solid rgba(0, 229, 255, .25);
+    opacity: 0;
+    z-index: 21;
+}
+.pulse1 { animation: radarPulse 4s infinite linear; }
+.pulse2 { animation: radarPulse 4s infinite linear 1.3s; }
+.pulse3 { animation: radarPulse 4s infinite linear 2.6s; }
+
+/* ===========================================================
+   FIXED INTERACTIVE SIDEBAR & FOREGROUND PANELS
+=========================================================== */
+.radarStatus {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 30;
+}
+
+.statusItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(11, 22, 36, .85);
+    border: 1px solid rgba(255, 255, 255, .05);
+    color: #DCE7F3;
+    font-size: 13px;
+}
+.statusItem svg { color: #00E5FF; font-size: 16px; }
+
+.scanLabel {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: rgba(10, 20, 34, .9);
+    border: 1px solid rgba(255, 255, 255, .08);
+    color: #DDE7F3;
+    font-size: 13px;
+    z-index: 30;
+}
+.scanLabel svg { color: #FFC107; font-size: 16px; }
+
+.radarSidePanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.summaryCard {
+    background: rgba(12, 22, 35, .90);
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
+    animation: cardFloat 6s ease-in-out infinite;
+}
+.summaryCard:nth-child(2) { animation-delay: 1.2s; }
+.summaryCard:nth-child(3) { animation-delay: 2.4s; }
+.summaryCard:nth-child(4) { animation-delay: 3.6s; }
+
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #00E5FF;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summaryMetricsRow {
+    display: flex;
+    gap: 20px;
+}
+.summaryMetric { flex: 1; }
+.summaryValue { font-size: 38px; font-weight: 800; color: #FFFFFF; line-height: 1; }
+.summaryValue.critical { color: #FF5252; }
+.summaryLabel { margin-top: 6px; color: #8EA7BD; font-size: 12px; }
+
+.progressSpacing { margin-bottom: 14px; }
+.progressSpacing:last-child { margin-bottom: 0; }
+.progressLabel { display: flex; justify-content: space-between; color: #C7D6E5; font-size: 12px; margin-bottom: 4px; }
+
+.legendGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.legendItem { display: flex; align-items: center; gap: 8px; color: #E6EEF8; font-size: 12px; }
+.legendColor { width: 10px; height: 10px; border-radius: 50%; }
+.legendColor.low { background: #00E676; }
+.legendColor.medium { background: #FFC107; }
+.legendColor.high { background: #FF7043; }
+.legendColor.criticalCard { background: #FF1744; }
+
+.oracleStatus { display: flex; flex-direction: column; gap: 12px; }
+.oracleRow { display: flex; justify-content: space-between; align-items: center; color: #C7D6E5; font-size: 13px; }
+.oracleRow .good { color: #00E676; }
+.oracleRow .info { color: #00E5FF; }
+
+.intelRow { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, .04); color: #C7D5E2; font-size: 13px; }
+.intelRow:last-child { border-bottom: none; }
+.intelRow strong { color: #00E676; font-weight: 600; }
+
+/* ===========================================================
+   ANIMATION TIME MECHANICS
+=========================================================== */
+@keyframes radarRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes radarPulse {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+}
+@keyframes threatPulse {
+    0% { transform: scale(0.2); opacity: 0.8; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+@keyframes threatBlink {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* ===========================================================
+   RESPONSIVE DESIGN CORRECTIONS
+=========================================================== */
+@media (max-width: 1200px) {
+    .radarCanvas { height: 600px; }
+    .radarSidePanel { margin-top: 10px; }
+}
+
+@media (max-width: 992px) {
+    .radarStatus, .scanLabel { position: relative; inset: auto; flex-direction: row; flex-wrap: wrap; padding: 10px; gap: 10px; }
+    .scanLabel { display: inline-flex; width: fit-content; margin: 10px 24px; }
+    .radarCanvas { height: 540px; }
+}
+
+@media (max-width: 768px) {
+    .radarTitle { font-size: 30px; }
+    .radarCanvas { height: 480px; }
+    .radarCenter { width: 150px; height: 150px; }
+    .radarCore { width: 130px; height: 130px; }
+    .coreRadarScore { font-size: 26px; }
+}

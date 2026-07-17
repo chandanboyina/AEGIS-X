@@ -1,0 +1,135 @@
+:root{
+
+    --bg:#08131F;
+
+    --sidebar:#091523;
+
+    --header:#0C1625;
+
+    --card:#121F33;
+
+    --card-dark:#0F1B2D;
+
+    --border:#26364A;
+
+    --border-light:#31445D;
+
+    --primary:#FFFFFF;
+
+    --secondary:#9BB2D1;
+
+    --success:#37D67A;
+
+    --warning:#F6C343;
+
+    --danger:#FF5C5C;
+
+}
+
+html,
+body,
+#root{
+
+margin:0;
+
+width:100%;
+
+height:100%;
+
+background:#08131F;
+
+overflow:hidden;
+
+font-family:
+
+Inter,
+
+Segoe UI,
+
+sans-serif;
+
+}
+
+*{
+
+box-sizing:border-box;
+
+}
+
+body{
+
+color:white;
+
+background:#08131F;
+
+}
+
+::-webkit-scrollbar{
+
+width:8px;
+
+height:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#08131F;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#2B3E54;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#3D5876;
+
+}
+
+@keyframes blink{
+
+    0%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:0;
+
+    }
+
+    100%{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes blink{
+
+    0%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:0;
+
+    }
+
+    100%{
+
+        opacity:1;
+
+    }
+
+}

@@ -1,0 +1,41 @@
+.ant-menu{
+
+    background:#091523 !important;
+
+}
+
+.ant-menu-item{
+
+    height:52px !important;
+
+    line-height:52px !important;
+
+    margin:4px 8px !important;
+
+    border-radius:6px !important;
+
+}
+
+.ant-menu-item-selected{
+
+    background:#1C4F91 !important;
+
+}
+
+.ant-menu-item:hover{
+
+    background:#18324D !important;
+
+}
+
+.ant-menu-inline-collapsed .ant-menu-item{
+
+    padding-inline:calc(50% - 18px) !important;
+
+}
+
+.ant-layout-sider{
+
+    transition:all .25s ease;
+
+}
