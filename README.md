@@ -189,3 +189,248 @@ Continuous Learning
 | Cyber Digital Twin | Simulates cyber attacks |
 | AI Council | Consensus-based decision making |
 | Explainable AI | Generates transparent reasoning |
+
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+- React.js
+- TypeScript
+- Tailwind CSS
+- Ant Design
+- Chart.js
+
+## Backend
+
+- Python
+- FastAPI
+- REST APIs
+
+## Artificial Intelligence
+
+- Machine Learning
+- Behavioral Analytics
+- Graph Intelligence
+- Explainable AI (XAI)
+- Multi-Agent AI
+- Attack Graph Analysis
+- Enterprise Knowledge Graph
+- Digital Twin Simulation
+- Predictive Analytics
+
+## Database
+
+- PostgreSQL
+
+## DevOps
+
+- Docker
+- Git
+- GitHub
+
+---
+
+# 📂 Project Structure
+
+```text
+AEGIS-X
+│
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   └── assets/
+│
+├── backend/
+│   ├── api/
+│   ├── agents/
+│   ├── models/
+│   ├── services/
+│   ├── database/
+│   └── utils/
+│
+├── docs/
+│
+├── screenshots/
+│
+├── README.md
+│
+└── requirements.txt
+```
+
+---
+
+# ⚙️ Installation
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/your-username/AEGIS-X.git
+
+cd AEGIS-X
+```
+
+## Backend Setup
+
+```bash
+cd backend
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux / macOS
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+## Frontend Setup
+
+```bash
+cd frontend
+
+npm install
+```
+
+---
+
+# ▶️ Running the Project
+
+## Start Backend
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend will start at
+
+```
+http://localhost:8000
+```
+
+---
+
+## Start Frontend
+
+```bash
+npm run dev
+```
+
+Frontend will start at
+
+```
+http://localhost:5173
+```
+
+---
+
+# 📡 REST API
+
+| Method | Endpoint | Description |
+|----------|-----------|-------------|
+| GET | / | Health Check |
+| POST | /events | Receive Security Events |
+| GET | /incidents | View Incidents |
+| GET | /dashboard | Dashboard Data |
+| POST | /analysis | AI Threat Analysis |
+
+---
+
+# 📊 Dashboard
+
+The dashboard provides a unified view of enterprise cybersecurity operations.
+
+### Features
+
+- Live Security Incidents
+- Threat Timeline
+- Enterprise Risk Score
+- Behavioral Analysis
+- Attack Graph Visualization
+- AI Council Recommendations
+- Digital Twin Simulation
+- Business Impact Analysis
+- Explainable AI Reports
+- Audit Logs
+
+---
+
+# 🎯 Project Highlights
+
+- Autonomous Multi-Agent AI Platform
+- AI-powered Threat Detection
+- Enterprise Behavioral Analytics
+- Predictive Threat Intelligence
+- Cyber Digital Twin
+- Explainable AI
+- Attack Graph Intelligence
+- Enterprise Knowledge Repository
+- Consensus-based AI Decision Engine
+- Real-time Dashboard
+- Continuous Learning Framework
+
+---
+
+# 🚀 Future Enhancements
+
+- Real-time SIEM Integration
+- SOAR Automation
+- Cloud-native Deployment
+- Kubernetes Support
+- Threat Intelligence Feed Integration
+- Multi-Cloud Monitoring
+- LLM-powered Security Assistant
+- Mobile Dashboard
+- Automated Playbook Execution
+- Advanced Threat Hunting
+
+---
+
+# 👥 Team
+
+### Developed By
+
+**M. Rushika**
+
+**B. Naga Sai Chandan**
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+
+2. Create a feature branch.
+
+```bash
+git checkout -b feature-name
+```
+
+3. Commit your changes.
+
+```bash
+git commit -m "Added new feature"
+```
+
+4. Push the branch.
+
+```bash
+git push origin feature-name
+```
+
+5. Open a Pull Request.
+
+---
+
+# 📜 License
+
+This project is developed for educational, research, and hackathon purposes.
+
