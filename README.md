@@ -1,289 +1,116 @@
 # 🛡️ AEGIS-X
 
-## AI-Driven Cyber Resilience Platform for Critical National Infrastructure
+> **AI-Driven Cyber Resilience Platform for Critical National Infrastructure**
 
-AEGIS-X (Autonomous Enterprise Guardian Intelligence System) is an intelligent multi-agent cybersecurity platform designed to protect Critical National Infrastructure (CNI) from sophisticated cyber threats. The platform leverages Artificial Intelligence, Machine Learning, Graph Intelligence, Digital Twins, Behavioral Analytics, and Explainable AI to detect, predict, analyze, and respond to cyber attacks before they impact critical services.
+AEGIS-X (Autonomous Enterprise Guardian Intelligence System) is an AI-powered cybersecurity platform designed to protect Critical National Infrastructure (CNI) against modern cyber threats. It combines Behavioral Analytics, Multi-Agent Artificial Intelligence, Attack Graph Intelligence, Digital Twin Simulation, Enterprise Knowledge, and Explainable AI to proactively detect, analyze, predict, and mitigate cyber attacks.
 
-Unlike traditional cybersecurity systems that rely primarily on signatures and predefined rules, AEGIS-X continuously learns organizational behavior, identifies anomalies, predicts attacker movements, simulates attack scenarios, and recommends optimal response strategies through a collaborative network of specialized AI agents.
-
----
-
-# 📖 Table of Contents
-
-- About the Project
-- Problem Statement
-- Proposed Solution
-- Key Features
-- System Architecture
-- Complete System Workflow
-- Core AI Modules
-- Technology Stack
-- Project Structure
-- Installation
-- Running the Project
-- Dashboard
-- Future Enhancements
-- Team
-- License
+Unlike traditional SIEM solutions that rely on static rules and signature-based detection, AEGIS-X continuously learns organizational behavior, correlates security events, predicts attacker progression, simulates cyber incidents, and recommends intelligent response strategies.
 
 ---
 
-# 🚀 About the Project
+# 📖 Overview
 
-Critical National Infrastructure such as healthcare, banking, defense, transportation, energy, education, and government services has become one of the primary targets of sophisticated cyber attacks. Traditional cybersecurity platforms such as SIEM and SOAR solutions primarily rely on predefined signatures and manually created detection rules. These approaches struggle to detect unknown attacks, generate excessive false positives, and often overwhelm security analysts with millions of alerts.
+Cybersecurity has evolved beyond traditional monitoring and rule-based detection. Modern attacks such as Advanced Persistent Threats (APTs), ransomware, insider threats, and zero-day exploits require intelligent, adaptive, and predictive defense mechanisms.
 
-AEGIS-X introduces a next-generation AI-driven cyber resilience platform that transforms cybersecurity from reactive monitoring into proactive intelligence.
+AEGIS-X addresses these challenges by providing an autonomous cyber resilience platform capable of:
 
-The platform continuously monitors enterprise environments, analyzes behavioral patterns, correlates security events across multiple sources, predicts future attacker movements, simulates cyber incidents using Digital Twins, and generates explainable security recommendations for analysts.
+- Detecting behavioral anomalies
+- Correlating security events
+- Predicting attacker movement
+- Simulating attack impact
+- Recommending optimal response strategies
+- Continuously learning from previous incidents
 
-Instead of replacing human analysts, AEGIS-X serves as an intelligent decision-support platform that significantly improves detection accuracy, reduces response time, minimizes analyst workload, and continuously learns from previous incidents.
-
----
-
-# 🎯 Problem Statement
-
-Modern cyber attacks are becoming increasingly sophisticated and frequently target Critical National Infrastructure.
-
-Traditional cybersecurity platforms suffer from several major limitations:
-
-- Signature-based detection fails against zero-day attacks.
-- Analysts experience severe alert fatigue due to excessive false positives.
-- Security events are analyzed independently rather than collectively.
-- Most attacks remain undetected for extended periods.
-- Existing systems cannot predict attacker progression.
-- Knowledge gained from previous incidents is rarely reused.
-- Security recommendations often lack transparency and explainability.
-
-These limitations increase organizational risk, delay incident response, and expose essential public services to large-scale cyber attacks.
+The platform is designed to support Security Operations Centers (SOC) by assisting analysts with intelligent, explainable, and context-aware cybersecurity insights.
 
 ---
 
-# 💡 Proposed Solution
+# ✨ Features
 
-AEGIS-X provides an autonomous cyber resilience platform built around a collaborative ecosystem of intelligent AI agents.
-
-The platform continuously collects security telemetry from enterprise environments, normalizes incoming events, detects behavioral anomalies, correlates attack patterns, predicts attacker behavior, estimates business impact, simulates attack propagation, and generates explainable recommendations for security teams.
-
-Every incident contributes new organizational knowledge, allowing the Enterprise Brain to continuously improve future decision making.
-
-The objective is to shift cybersecurity operations from reactive defense toward intelligent, predictive, and continuously learning cyber resilience.
-
----
-
-# ✨ Key Features
-
-- AI-driven Behavioral Threat Detection
-- Multi-Agent Cybersecurity Architecture
-- Enterprise Intelligence Fusion
-- Continuous Organizational Learning
-- Enterprise Brain Knowledge Repository
-- Cyber Digital Twin Simulation
-- Attack Graph Analysis
-- Predictive Threat Intelligence
-- Cyber DNA Behavioral Fingerprinting
-- Explainable Artificial Intelligence (XAI)
-- AI Council Consensus Decision Engine
-- Enterprise Risk Assessment
-- Business Impact Prediction
-- Automated Incident Correlation
-- Interactive Security Dashboard
-- REST API Integration
-- Audit Logging
-- Continuous Learning Framework
+- 🤖 Multi-Agent AI Architecture
+- 🧠 Enterprise Brain for Continuous Learning
+- 🔍 Behavioral Anomaly Detection
+- 🌐 Enterprise Intelligence Fusion
+- 📊 Attack Graph Analysis
+- 🧬 Cyber DNA Fingerprinting
+- 🔮 Predictive Threat Intelligence
+- 🛰️ Cyber Digital Twin Simulation
+- 📖 Explainable AI (XAI)
+- 🤝 AI Council Consensus Decision Engine
+- 📈 Enterprise Risk Assessment
+- ⚡ Automated Incident Correlation
+- 📋 Business Impact Analysis
+- 📡 REST API Integration
+- 📊 Interactive Dashboard
+- 📝 Audit Logging
 
 ---
 
 # 🏗️ System Architecture
 
-```
-                        Enterprise Event Sources
-──────────────────────────────────────────────────────────────
- Firewalls   Endpoints   Servers   AD   Cloud   OT Devices
- IDS/IPS     Email       Applications   Network Devices
-──────────────────────────────────────────────────────────────
-                        │
-                        ▼
-                Data Ingestion Layer
-        • Event Collection
-        • Normalization
-        • Asset Enrichment
-        • Context Generation
-                        │
-                        ▼
-               AI Processing Pipeline
-──────────────────────────────────────────────
- Observer AI
-        │
- Behavior AI
-        │
- Correlation Engine
-        │
- Oracle AI
-        │
- Sentinel AI
-──────────────────────────────────────────────
-                        │
-                        ▼
-             Incident Intelligence Layer
-──────────────────────────────────────────────
- Incident Manager
- Enterprise Intelligence Fusion
- Commander AI
-──────────────────────────────────────────────
-                        │
-                        ▼
-               Enterprise Brain
-               Cyber Digital Twin
-                        │
-                        ▼
-             Strategic Intelligence Layer
-──────────────────────────────────────────────
- Attack Graph AI
- Cyber DNA
- Predictive Intelligence
- UEBA
- Explainable AI
-──────────────────────────────────────────────
-                        │
-                        ▼
-                AI Council Consensus
-                        │
-                        ▼
-              Dashboard & REST APIs
-                        │
-                        ▼
-          Storage, Learning & Audit Logs
+```text
+                        Event Sources
+ ─────────────────────────────────────────────────────────
+ Firewalls • IDS/IPS • EDR • AD • Servers • Cloud • OT
+ ─────────────────────────────────────────────────────────
+                          │
+                          ▼
+                  Data Ingestion Layer
+                          │
+                          ▼
+                AI Processing Pipeline
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+  Observer AI      Behavior AI      Correlation Engine
+                          │
+                          ▼
+                     Oracle AI
+                          │
+                          ▼
+                    Sentinel AI
+                          │
+                          ▼
+                 Incident Intelligence
+                          │
+                          ▼
+                  Commander AI
+                          │
+        ┌─────────────────┼──────────────────┐
+        ▼                 ▼                  ▼
+ Enterprise Brain   Attack Graph AI   Digital Twin
+                          │
+                          ▼
+                    AI Council
+                          │
+                          ▼
+             Dashboard & REST APIs
+                          │
+                          ▼
+             Storage & Continuous Learning
 ```
 
----
+### Architecture Overview
 
-# ⚙️ Architecture Overview
+The platform follows a modular layered architecture where every layer performs a specialized cybersecurity function.
 
-The AEGIS-X platform follows a modular layered architecture where every layer performs a specialized cybersecurity function.
-
-## 1. Event Sources
-
-Collects telemetry from:
-
-- Firewalls
-- IDS/IPS
-- Endpoints
-- Servers
-- Active Directory
-- Cloud Platforms
-- Email Systems
-- Network Devices
-- OT / SCADA Systems
+| Layer | Responsibility |
+|-------|----------------|
+| Event Sources | Collect enterprise security telemetry |
+| Data Ingestion | Normalize and enrich incoming events |
+| AI Processing | Detect anomalies and classify threats |
+| Incident Intelligence | Build unified security incidents |
+| Enterprise Brain | Store organizational knowledge |
+| Strategic Intelligence | Predict attacks and estimate risk |
+| AI Council | Generate consensus-based decisions |
+| Dashboard | Visualize incidents and recommendations |
+| Storage | Persist incidents, logs, and learning data |
 
 ---
 
-## 2. Data Ingestion Layer
+# 🔄 Workflow
 
-Responsible for:
-
-- Event Collection
-- Log Normalization
-- Asset Enrichment
-- User Mapping
-- Context Generation
-- Business Context Association
-
----
-
-## 3. AI Processing Pipeline
-
-The first intelligence layer analyzes every incoming event.
-
-Components include:
-
-- Observer AI
-- Behavior AI
-- Correlation Engine
-- Oracle AI
-- Sentinel AI
-
----
-
-## 4. Incident Intelligence Layer
-
-Transforms isolated events into complete enterprise incidents.
-
-Components include:
-
-- Incident Manager
-- Enterprise Intelligence Fusion
-- Commander AI
-
----
-
-## 5. Enterprise Brain
-
-Maintains organizational memory by storing:
-
-- Historical Incidents
-- Cyber DNA
-- Enterprise Knowledge Graph
-- Response Playbooks
-- Similar Incidents
-
----
-
-## 6. Strategic Intelligence Layer
-
-Provides advanced cybersecurity intelligence through:
-
-- Attack Graph AI
-- Predictive Intelligence
-- Cyber Digital Twin
-- Explainable AI
-- Enterprise Risk Assessment
-
----
-
-## 7. AI Council
-
-Multiple specialized AI agents independently evaluate every recommendation.
-
-The Debate Engine compares outputs from different AI modules before producing a final consensus decision.
-
-This significantly reduces false positives and improves decision accuracy.
-
----
-
-## 8. Dashboard Layer
-
-Provides security analysts with:
-
-- Live Threat Dashboard
-- Incident Timeline
-- Enterprise Risk Metrics
-- Attack Graph Visualization
-- AI Reasoning
-- Response Recommendations
-- Business Impact Assessment
-
----
-
-## 9. Storage & Learning Layer
-
-Stores:
-
-- Enterprise Knowledge
-- Historical Incidents
-- Audit Logs
-- AI Learning Repository
-- Threat Intelligence
-- Response History
-
-The stored knowledge continuously improves future recommendations.
-
----
-
-# 🔄 Complete System Workflow
-
-The AEGIS-X platform follows a multi-stage intelligent workflow.
-
-```
+```text
 Security Event
       │
       ▼
@@ -296,7 +123,7 @@ Observer AI
 Behavior AI
       │
       ▼
-Threat Correlation Engine
+Threat Correlation
       │
       ▼
 Oracle AI
@@ -311,10 +138,10 @@ Incident Manager
 Commander AI
       │
       ▼
-Attack Graph AI
+Enterprise Brain
       │
       ▼
-Cyber DNA
+Attack Graph AI
       │
       ▼
 Cyber Digital Twin
@@ -329,68 +156,36 @@ Explainable AI
 Dashboard
       │
       ▼
-Enterprise Brain
-      │
-      ▼
-Audit Logs & Continuous Learning
+Continuous Learning
 ```
+
+### Workflow Summary
+
+1. Security events are collected from enterprise infrastructure.
+2. Incoming logs are normalized and enriched.
+3. AI agents analyze user, system, and network behavior.
+4. Related events are correlated into complete attack narratives.
+5. Threats are classified and validated.
+6. Commander AI orchestrates advanced intelligence modules.
+7. Digital Twin simulates attack impact.
+8. AI Council produces a consensus-based response.
+9. Explainable AI generates transparent recommendations.
+10. Enterprise Brain stores knowledge for continuous improvement.
 
 ---
 
-# 🔍 Workflow Description
+# 🤖 Core AI Modules
 
-### Step 1 – Event Collection
-
-Security events are collected from multiple enterprise IT and Operational Technology environments.
-
-### Step 2 – Event Normalization
-
-Incoming events are standardized into a common enterprise schema.
-
-### Step 3 – Observer AI
-
-Performs initial validation, context extraction, and preliminary risk assessment.
-
-### Step 4 – Behavior AI
-
-Detects deviations from normal organizational behavior.
-
-### Step 5 – Correlation Engine
-
-Links related security events together to identify attack campaigns.
-
-### Step 6 – Oracle AI
-
-Classifies attacks using MITRE ATT&CK techniques.
-
-### Step 7 – Sentinel AI
-
-Validates findings and filters false positives.
-
-### Step 8 – Incident Manager
-
-Creates unified enterprise incidents.
-
-### Step 9 – Commander AI
-
-Coordinates advanced AI modules for strategic decision making.
-
-### Step 10 – AI Council
-
-Multiple AI agents debate and vote on the optimal response.
-
-### Step 11 – Cyber Digital Twin
-
-Simulates attack propagation and estimates business impact.
-
-### Step 12 – Explainable AI
-
-Generates transparent explanations for every recommendation.
-
-### Step 13 – Dashboard
-
-Displays live incidents, attack graphs, AI reasoning, and enterprise risk.
-
-### Step 14 – Enterprise Brain
-
-Stores organizational knowledge to continuously improve future recommendations.
+| AI Module | Responsibility |
+|-----------|----------------|
+| Observer AI | Initial event analysis and context extraction |
+| Behavior AI | Detects behavioral anomalies |
+| Correlation Engine | Links related security events |
+| Oracle AI | Threat classification using MITRE ATT&CK |
+| Sentinel AI | Validates threats and reduces false positives |
+| Commander AI | Orchestrates strategic AI decisions |
+| Enterprise Brain | Organizational knowledge repository |
+| Attack Graph AI | Predicts attacker movement |
+| Cyber Digital Twin | Simulates cyber attacks |
+| AI Council | Consensus-based decision making |
+| Explainable AI | Generates transparent reasoning |
