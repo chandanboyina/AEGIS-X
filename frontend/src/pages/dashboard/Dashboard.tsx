@@ -1,7 +1,9 @@
+import { useEffect, useState, useRef } from "react";
 import { Row, Col } from "antd";
+import client from "../../api/api";
+import { connectToDashboardSocket } from "../../api/websocket";
 
-//import ExecutiveMetrics from "../../components/dashboard/executive/ExecutiveMetrics";
-//import ExecutiveIncident from "../../components/dashboard/executive/ExecutiveIncident";
+// Component Imports
 import ExecutiveRecommendation from "../../components/dashboard/executive/ExecutiveRecommendation";
 import ExecutiveTimeline from "../../components/dashboard/executive/ExecutiveTimeline";
 import AICouncilSummary from "../../components/dashboard/executive/AICouncilSummary/AICouncilSummary";
@@ -16,123 +18,109 @@ import ThreatFeed from "../../components/dashboard/executive/ThreatFeed";
 import ThreatIntelTicker from "../../components/dashboard/executive/ThreatIntelTicker";
 import ExecutiveAlerts from "../../components/dashboard/executive/ExecutiveAlerts";
 
+export default function Dashboard() {
+    const [securityData, setSecurityData] = useState<any>(null);
+    // Use a Ref to keep track of the socket instance across re-renders
+    const socketRef = useRef<WebSocket | null>(null);
 
-export default function Dashboard(){
+    useEffect(() => {
+        // 1. Fetch baseline data
+        client.get("/dashboard")
+            .then((response) => {
+                setSecurityData(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching dashboard data:", error);
+            });
 
-    return(
+        // 2. Open hot real-time stream pipe
+        // If one is already open, don't open another
+        if (!socketRef.current) {
+            socketRef.current = connectToDashboardSocket((livePacket) => {
+                console.log("New live packet received:", livePacket); // DEBUG
+                setSecurityData(livePacket);
+            });
+        }
 
+        // 3. Cleanup: only close if component unmounts
+        return () => {
+            if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+                socketRef.current.close();
+            }
+            socketRef.current = null;
+        };
+    }, []);
+
+    return (
         <div
             style={{
-                padding:20,
-                background:"#07111F",
-                minHeight:"100%"
+                padding: 20,
+                background: "#07111F",
+                minHeight: "100vh"
             }}
         >
-
-            <Row gutter={[20,20]} style={{ marginBottom: 20 }}>
-
-                <ThreatIntelTicker />
-
+            {/* Ticker Row */}
+            <Row gutter={[20, 20]} style={{ marginBottom: 20 }}>
+                <ThreatIntelTicker {...{ data: securityData?.commander } as any} />
             </Row>
-            
 
-            <Row gutter={[20,20]}>
-
+            {/* Core Metrics & Panels Grid */}
+            <Row gutter={[20, 20]}>
                 <Col span={24}>
-
-                    <ExecutiveKPIRow/>
-
+                    <ExecutiveKPIRow {...{ data: securityData } as any} />
                 </Col>
 
                 <Col span={24}>
-                    <GlobalThreatSummary/>
+                    <GlobalThreatSummary {...{ data: securityData?.forecast } as any} />
                 </Col>
-
-                
 
                 <Col span={16}>
-
-                <EnterpriseCard title="Global Threat Landscape (Real-Time)"
-                height={560}
-                >
-
-                <GlobalThreatMap/>
-
-                </EnterpriseCard>
-
+                    <EnterpriseCard title="Global Threat Landscape (Real-Time)" height={560}>
+                        <GlobalThreatMap {...{ data: securityData?.strategic_analysis } as any} />
+                    </EnterpriseCard>
                 </Col>
 
                 <Col span={8}>
-
-                <EnterpriseCard title="National Infrastructure"
-                height={560}
-                >
-
-                <NationalInfrastructure/>
-
-                </EnterpriseCard>
-
+                    <EnterpriseCard title="National Infrastructure" height={560}>
+                        <NationalInfrastructure {...{ data: securityData?.sentinel?.business_impact } as any} />
+                    </EnterpriseCard>
                 </Col>
 
                 <Col xs={24} lg={8}>
-
-                <EnterpriseCard title="Threat Feed"
-                height={450}
-                >
-
-                <ThreatFeed/>
-
-                </EnterpriseCard>
-
+                    <EnterpriseCard title="Threat Feed" height={450}>
+                        <ThreatFeed {...{ data: securityData?.brain?.history } as any} />
+                    </EnterpriseCard>
                 </Col>
 
                 <Col xs={24} lg={10}>
-
-                <EnterpriseCard title="Threat Origin Ranking"
-                height={450}
-                >
-
-                <ThreatOriginRanking/>
-
-                </EnterpriseCard>
-
+                    <EnterpriseCard title="Threat Origin Ranking" height={450}>
+                        <ThreatOriginRanking {...{ data: securityData?.strategic_analysis } as any} />
+                    </EnterpriseCard>
                 </Col>
 
                 <Col xs={24} lg={6}>
-
-                <EnterpriseCard title="Threat Legend"
-                height={450}
-                >
-
-                <ThreatLegend/>
-
-                </EnterpriseCard>
-
+                    <EnterpriseCard title="Threat Legend" height={450}>
+                        <ThreatLegend />
+                    </EnterpriseCard>
                 </Col>
-
 
                 <Col span={24}>
-
-                    <ExecutiveRecommendation/>
-
+                    <ExecutiveRecommendation {...{ data: securityData?.oracle } as any} />
                 </Col>
 
                 <Col xs={24} lg={12}>
-                    <AICouncilSummary/>
+                    <AICouncilSummary {...{ data: securityData?.council } as any} />
                 </Col>
 
                 <Col xs={24} lg={12}>
-                
-                    <ExecutiveTimeline/>
+                    <ExecutiveTimeline {...{ data: securityData?.sentinel?.workflow } as any} />
                 </Col>
-
-            </Row>
-            <Row gutter={[20,20]} style={{ marginTop: 20, marginLeft:1 }}>
-                <ExecutiveAlerts/>
             </Row>
 
+            {/* Alerts Row */}
+            <Row gutter={[20, 20]} style={{ marginTop: 20, marginLeft: 1 }}>
+                <ExecutiveAlerts {...{ data: securityData?.incident } as any} />
+            </Row>
         </div>
-
     );
-
 }

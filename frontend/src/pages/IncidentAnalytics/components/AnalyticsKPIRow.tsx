@@ -238,7 +238,7 @@ export default function AnalyticsKPIRow() {
                                 }
                                 showInfo={false}
                                 strokeColor={card.color}
-                                trailColor="#223A55"
+                                railColor="#223A55"
                                 size="small"
                             />
 

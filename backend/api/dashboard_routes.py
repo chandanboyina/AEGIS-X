@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from api.routes.dashboard import router as dashboard_router
 from api.routes.council import router as council_router
 from api.routes.metrics import router as metrics_router
@@ -20,8 +20,17 @@ def register_dashboard_routes(app: FastAPI):
 
     app.include_router(topology_router)
 
-    app.include_router(websocket_router)
+    app.include_router(websocket_router, prefix="/ws")
 
     app.include_router(cache_router)
 
     app.include_router(enterprise_router)
+
+router = APIRouter()
+
+
+@router.get("/dashboard/latest")
+async def get_latest_data():
+    # Return the same data format your WebSocket sends
+    # This allows your frontend to fetch if the WS is lagging
+    return {"status": "success", "data": {}}

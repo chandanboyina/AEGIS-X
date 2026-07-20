@@ -27,7 +27,7 @@ class SimilarityEngine:
             reasons.append("Same asset")
 
         current_iocs = len(current["ioc_list"])
-        previous_iocs = len(previous["ioc_list"])
+        previous_iocs = len(previous.get("ioc_list", []))
 
         difference = abs(current_iocs - previous_iocs)
 

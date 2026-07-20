@@ -101,7 +101,7 @@ strokeColor={
 :"#00E676"
 }
 
-trailColor="#223B58"
+railColor="#223B58"
 
 />
 

@@ -506,7 +506,32 @@ class EnterpriseCyberBrain:
 
                 best = {
 
-                    "incident": previous,
+                    "incident": {
+
+                        "incident_id": previous.get("incident_id"),
+
+                        "category": previous.get("category"),
+
+                        "severity": previous.get("severity"),
+
+                        "status": previous.get("status"),
+
+                        "asset": {
+
+                            "hostname":
+
+                                previous.get(
+                                    "asset",
+                                    {}
+                                ).get(
+                                    "hostname"
+                                )
+
+                        },
+
+                        "created": previous.get("created")
+
+                    },
 
                     "analysis": result
 

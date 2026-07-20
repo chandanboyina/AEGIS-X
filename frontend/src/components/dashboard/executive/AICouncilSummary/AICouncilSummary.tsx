@@ -98,7 +98,7 @@ export default function AICouncilSummary() {
         percent={agreement}
         showInfo={false}
         strokeColor="#00E676"
-        trailColor="#22384D"
+        railColor="#22384D"
       />
 
       <div

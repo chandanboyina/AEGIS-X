@@ -138,6 +138,12 @@ class IncidentManager:
         Enterprise Learning
         """
 
+        if "correlation" not in packet:
+            print("WARNING: Missing correlation in packet. Building default.")
+            packet["correlation"] = {"status": "none", "threat_level": "low"}
+        
+        
+
         # -----------------------------
         # Oracle AI
         # -----------------------------

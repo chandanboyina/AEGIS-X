@@ -566,11 +566,31 @@ class CommanderAI:
         #print("UEBA          :", ueba_result)
         #print("=========================\n")
 
+        threat_summary = {
+
+            "incident_id": incident["incident_id"],
+
+            "category": incident["category"],
+
+            "severity": incident["severity"],
+
+            "hostname": incident["asset"]["hostname"],
+
+            "mitre": {
+
+                "id": incident["mitre"]["id"],
+
+                "tactic": incident["mitre"]["tactic"],
+
+                "technique": incident["mitre"]["technique"]
+
+            }
+
+        }
+
         enterprise_intelligence = self.enterprise_builder.build(
 
-            
-
-            threat=incident,
+            threat=threat_summary,
 
             behavior=incident.get(
                 "behavior_correlation",
@@ -585,9 +605,7 @@ class CommanderAI:
             ueba=ueba_result,
 
             cyber_dna={
-
                 "similarity": dna_similarity
-
             },
 
             business=forecast["forecast"].get(
@@ -698,9 +716,27 @@ class CommanderAI:
             best_strategy["graph"]
         )
 
-        brain.remember(
-            incident
-        )
+        brain.remember({
+
+            "incident_id": incident["incident_id"],
+
+            "category": incident["category"],
+
+            "severity": incident["severity"],
+
+            "status": incident["status"],
+
+            "created": incident["created"],
+
+            "asset": {
+
+                "hostname": incident["asset"]["hostname"]
+
+            },
+
+            "mitre": incident["mitre"]
+
+        })
 
         
         # ---------------------------------------

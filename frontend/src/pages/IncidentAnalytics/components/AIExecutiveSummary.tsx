@@ -301,8 +301,8 @@ export default function AIExecutiveSummary(){
                         title="Incidents"
                         value={summary.incidents}
                         prefix={<WarningOutlined/>}
-                        valueStyle={{
-                            color:"#FFFFFF"
+                        styles={{
+                            content: { color: 'red' }
                         }}
                     />
 
