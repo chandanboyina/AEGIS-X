@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from copy import deepcopy
 
 class IncidentMemory:
     """
@@ -21,28 +21,24 @@ class IncidentMemory:
 
     def remember(self, incident):
 
-        self.memory.append(incident)
+        incident_copy = deepcopy(incident)
+
+        self.memory.append(incident_copy)
 
         hostname = incident["asset"]["hostname"]
 
-        self.by_asset[
-            hostname
-        ].append(incident)
+        self.by_asset[hostname].append(incident_copy)
 
         username = incident.get(
             "username",
             "Unknown"
         )
 
-        self.by_user[
-            username
-        ].append(incident)
+        self.by_user[username].append(incident_copy)
 
         mitre = incident["mitre"]["id"]
 
-        self.by_mitre[
-            mitre
-        ].append(incident)
+        self.by_mitre[mitre].append(incident_copy)
 
     def all(self):
 

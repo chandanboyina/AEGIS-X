@@ -2,7 +2,7 @@ import asyncio
 import logging
 import traceback
 from simulation.enterprise_pipeline import EnterprisePipeline
-from core.websocket_manager import manager
+from core.packet_router import router
 
 # Configure logger
 logger = logging.getLogger("uvicorn")
@@ -31,7 +31,7 @@ class PipelineRunner:
         for packet in self.pipeline.run_live():
             if self.main_loop:
                 asyncio.run_coroutine_threadsafe(
-                    manager.broadcast(packet), 
+                    router.publish(packet), 
                     self.main_loop
                 )
 

@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+
 import { Row, Col } from "antd";
-import client from "../../api/api";
-import { connectToDashboardSocket } from "../../api/websocket";
+import { DashboardAPI } from "../../api/dashboard";
+import { useDashboard } from "../../context/DashboardContext";
 
 // Component Imports
 import ExecutiveRecommendation from "../../components/dashboard/executive/ExecutiveRecommendation";
@@ -19,37 +19,21 @@ import ThreatIntelTicker from "../../components/dashboard/executive/ThreatIntelT
 import ExecutiveAlerts from "../../components/dashboard/executive/ExecutiveAlerts";
 
 export default function Dashboard() {
-    const [securityData, setSecurityData] = useState<any>(null);
-    // Use a Ref to keep track of the socket instance across re-renders
-    const socketRef = useRef<WebSocket | null>(null);
+    const { securityData, loading, error } = useDashboard();
 
-    useEffect(() => {
-        // 1. Fetch baseline data
-        client.get("/dashboard")
-            .then((response) => {
-                setSecurityData(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching dashboard data:", error);
-            });
+    if (loading) {
 
-        // 2. Open hot real-time stream pipe
-        // If one is already open, don't open another
-        if (!socketRef.current) {
-            socketRef.current = connectToDashboardSocket((livePacket) => {
-                console.log("New live packet received:", livePacket); // DEBUG
-                setSecurityData(livePacket);
-            });
-        }
+        return <div>Loading Dashboard...</div>;
 
-        // 3. Cleanup: only close if component unmounts
-        return () => {
-            if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-                socketRef.current.close();
-            }
-            socketRef.current = null;
-        };
-    }, []);
+    }
+
+    if (error) {
+
+        return <div>{error}</div>;
+
+    }
+
+    
 
     return (
         <div

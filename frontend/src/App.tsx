@@ -4,17 +4,23 @@ import MainLayout from "./layouts/MainLayout";
 
 import AppRoutes from "./router/AppRouter";
 
+import { DashboardProvider } from "./context/DashboardContext";
+
 export default function App(){
 
     return(
 
         <BrowserRouter>
 
-            <MainLayout>
+            <DashboardProvider>
 
-                <AppRoutes/>
+                <MainLayout>
 
-            </MainLayout>
+                    <AppRoutes/>
+
+                </MainLayout>
+
+            </DashboardProvider>
 
         </BrowserRouter>
 

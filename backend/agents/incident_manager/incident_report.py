@@ -1,8 +1,8 @@
+from copy import deepcopy
+
+
 class IncidentReport:
-    """
-    Generates Incident Manager report.
-    """
 
     def generate(self, incident):
 
-        return incident
+        return deepcopy(incident)
