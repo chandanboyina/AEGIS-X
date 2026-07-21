@@ -233,34 +233,6 @@ Continuous Learning
 
 ---
 
-# 📂 Project Structure
-
-```text
-AEGIS-X
-│
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   └── assets/
-│
-├── backend/
-│   ├── api/
-│   ├── agents/
-│   ├── models/
-│   ├── services/
-│   ├── database/
-│   └── utils/
-│
-├── docs/
-│
-├── screenshots/
-│
-├── README.md
-│
-└── requirements.txt
-```
 
 ---
 
