@@ -105,6 +105,11 @@ class EnterprisePipeline:
             event_data.pop("asset")
 
         # 2. Sequential Module Processing
+
+        print("\n===== EVENT RECEIVED BY PIPELINE =====")
+        print(event)
+        print("\n===== ASSET RECEIVED BY PIPELINE =====")
+        print(asset)
         self.send_stage("Evidence Builder", "running")
         packet = EvidenceBuilder.build(event_data, asset)
         self.send_stage("Evidence Builder", "completed")

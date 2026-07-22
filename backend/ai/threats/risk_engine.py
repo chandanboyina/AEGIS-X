@@ -8,9 +8,14 @@ class RiskEngine:
 
         event = packet["event"]
 
+        #DEBUG
+        print("RiskEngine received:", repr(event["event_type"]))
+
         rule = ThreatRules.lookup(
             event["event_type"]
         )
+
+        print("Threat Rule:", rule)
 
         if rule is None:
 
@@ -28,8 +33,7 @@ class RiskEngine:
                     "Continue monitoring."
 
             }
-        #DEBUG
-        print("RiskEngine received:", event["event_type"])
+        
 
         return {
 

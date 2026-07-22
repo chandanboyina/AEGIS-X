@@ -59,7 +59,18 @@ class PipelineRunner:
                     self.main_loop
 
                 )
+  
+    def get_pipeline(self):
+        """
+        Returns the running Enterprise Pipeline instance.
+        """
 
+        if self.pipeline is None:
+            raise RuntimeError(
+                "Enterprise Pipeline has not been initialized yet."
+            )
+
+        return self.pipeline
 
 # Singleton instance
 runner = PipelineRunner()

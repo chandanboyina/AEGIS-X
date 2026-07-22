@@ -134,7 +134,34 @@ class ThreatRules:
             "risk": 85,
             "priority": "CRITICAL",
             "action": "Possible ransomware preparation."
-        }
+        },
+        "SQL Injection": {
+            "category": "Web Attack",
+            "risk": 75,
+            "priority": "CRITICAL",
+            "action": "Block malicious request and inspect web server."
+        },
+
+        "Phishing": {
+            "category": "Credential Access",
+            "risk": 65,
+            "priority": "HIGH",
+            "action": "Quarantine email and investigate recipients."
+        },
+
+        "Ransomware": {
+            "category": "Ransomware",
+            "risk": 95,
+            "priority": "CRITICAL",
+            "action": "Immediately isolate affected systems."
+        },
+
+        "DDoS": {
+            "category": "Availability",
+            "risk": 70,
+            "priority": "CRITICAL",
+            "action": "Enable DDoS mitigation and rate limiting."
+        },
 
     }
 
