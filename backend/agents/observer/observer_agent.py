@@ -276,7 +276,13 @@ class ObserverAgent:
                 "Continue monitoring."
             )
 
-            # ---------------------------------
+        # ---------------------------------
+        # Determine Threat Category
+        # ---------------------------------
+
+        
+
+        # ---------------------------------
         # Write Observer findings
         # ---------------------------------
 
@@ -291,6 +297,8 @@ class ObserverAgent:
             "priority": priority,
 
             "threat_category": risk["category"],
+
+            "requires_investigation": prediction == "ANOMALY",
 
             "confidence": observer_confidence,
 

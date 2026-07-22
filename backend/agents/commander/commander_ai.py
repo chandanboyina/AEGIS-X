@@ -97,6 +97,10 @@ class CommanderAI:
 
         best = strategic["recommended"]
 
+        if best is None:
+            print("\n[Commander] No recommended strategy returned.")
+            return
+
         evaluation = self.outcome_evaluator.evaluate(
             best,
             business
@@ -542,6 +546,10 @@ class CommanderAI:
 
         )
 
+        print("\n========== STRATEGIC ANALYSIS ==========")
+        print(strategic)
+        print("========================================\n")
+
         # ---------------------------------------
         # Graph AI
         # ---------------------------------------
@@ -703,18 +711,29 @@ class CommanderAI:
 
         print("Outcome stored successfully.\n")
 
-        best_strategy = strategic["recommended"]
+        
 
         # temporary
         #print("\n===== BEST STRATEGY =====")
         #print(best_strategy.keys())
         #print("=========================\n")
 
-        updated_time_machine = self.forecast.time_machine.predict(
-            incident,
-            forecast["forecast"]["enterprise_risk"],
-            best_strategy["graph"]
-        )
+
+        best_strategy = strategic.get("recommended")
+
+        if best_strategy is None:
+
+            print("[Commander] No strategy selected.")
+
+            updated_time_machine = {}
+
+        else:
+
+            updated_time_machine = self.forecast.time_machine.predict(
+                incident,
+                forecast["forecast"]["enterprise_risk"],
+                best_strategy.get("graph", {})
+            )
 
         brain.remember({
 
@@ -746,7 +765,7 @@ class CommanderAI:
         xai = self.xai.explain(
             incident,
             {
-                "strategic_analysis": strategic,
+                "strategic_analysis": strategic or {},
                 "decision": decision
             },
             votes
@@ -761,7 +780,7 @@ class CommanderAI:
             "strategic_analysis": strategic,
 
             # Commander Recommendation
-            "recommended_playbook": strategic["recommended"],
+            "recommended_playbook": best_strategy,
 
             #
             # Enterprise Brain

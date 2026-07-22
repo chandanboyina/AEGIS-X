@@ -717,6 +717,30 @@ class EnterpriseCyberBrain:
             incident
         )
 
+        if not proposals:
+
+            return {
+
+                "agent": "Enterprise Brain",
+
+                "recommendation": "None",
+
+                "confidence": 0,
+
+                "weight": 0.30,
+
+                "reason": [
+
+                    "No playbook proposals available."
+
+                ],
+
+                "evidence": {},
+
+                "timestamp": incident.get("timestamp")
+
+            }
+
         best = proposals[0]
 
         playbook = self.get_playbook(

@@ -52,11 +52,26 @@ class PredictiveIntelligence:
             incident
         )
 
+        print("\n===== PLAYBOOK DEBUG =====")
+        print("Category :", incident["category"])
+        print("Recommendation :", recommendation)
+        print("==========================")
+
         repo = PlaybookRepository()
 
         templates = repo.candidates(
             incident["category"]
         )
+
+        if not templates:
+            return {
+                "recommended": recommendation.get("recommended"),
+                "strategies": [],
+                "reason": "No playbook required for Normal category."
+            }
+
+        print("Templates Found :", len(templates))
+        print(templates)
 
         
 

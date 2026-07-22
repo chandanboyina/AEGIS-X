@@ -28,6 +28,8 @@ class RiskEngine:
                     "Continue monitoring."
 
             }
+        #DEBUG
+        print("RiskEngine received:", event["event_type"])
 
         return {
 

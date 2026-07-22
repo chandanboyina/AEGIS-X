@@ -370,5 +370,23 @@
             ]
         }
     }
+  ],
+    "Normal": [
+    {
+      "id": "PB-000",
+      "name": "Generic Investigation",
+      "steps": [
+        "Collect evidence",
+        "Review logs",
+        "Correlate with historical events",
+        "Monitor asset",
+        "Escalate if additional indicators appear"
+      ],
+      "actions": {
+        "isolate": [],
+        "protect": [],
+        "block": []
+      }
+    }
   ]
 }

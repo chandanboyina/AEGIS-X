@@ -14,6 +14,8 @@ import SOAR from "../pages/soar/SOAR";
 import Audit from "../pages/audit/audit";
 import Monitoring from "../pages/Monitoring/Monitoring";
 import IncidentAnalytics from "../pages/IncidentAnalytics";
+import AIProcessing from "../pages/AIProcessing";
+
 
 export default function AppRouter(){
 
@@ -49,6 +51,10 @@ export default function AppRouter(){
             <Route path="/monitoring" element={<Monitoring/>}/>
 
             <Route path="incident-analytics" element={<IncidentAnalytics/>}/>
+
+            <Route path="/ai-pipeline" element={<AIProcessing />}
+/>
+
 
         </Routes>
 

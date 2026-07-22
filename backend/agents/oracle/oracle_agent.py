@@ -124,7 +124,7 @@ class OracleAgent:
 
                 oracle.get(
 
-                    "investigation_confidence",
+                    "confidence",
 
                     50
 

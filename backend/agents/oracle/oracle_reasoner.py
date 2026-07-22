@@ -40,6 +40,14 @@ class OracleReasoner:
 
         )
 
+        requires_investigation = observer.get(
+
+            "requires_investigation",
+
+            False
+
+        )
+
         
 
         campaign = enterprise.get(
@@ -87,15 +95,28 @@ class OracleReasoner:
 
         if category == "Normal":
 
-            threat_level = "LOW"
-            confidence = random.randint(70, 85)
-            priority = "P4"
+            if requires_investigation:
+
+                threat_level = "MEDIUM"
+
+                confidence = 85
+
+                priority = "P3"
+
+            else:
+
+                threat_level = "LOW"
+
+                confidence = random.randint(70, 85)
+
+                priority = "P4"
 
         elif category == "Reconnaissance":
 
             threat_level = "MEDIUM"
             confidence = random.randint(80, 90)
             priority = "P3"
+
 
         elif category == "Credential Access":
 
@@ -141,7 +162,8 @@ class OracleReasoner:
                 "Disconnect affected host and initiate incident response.",
 
             "Normal":
-                "No immediate action required."
+
+                "Continue monitoring unless behavioral anomaly requires investigation."
         }
 
         recommendation = actions.get(
@@ -263,6 +285,8 @@ class OracleReasoner:
 
             "category": category,
 
+            "requires_investigation": requires_investigation,
+
             "mitre": mitre,
 
             "threat_level": threat_level,
@@ -279,6 +303,8 @@ class OracleReasoner:
 
             "enterprise": enterprise_risk,
 
-            "reasoning": reasoning
+            "reasoning": reasoning,
+
+            
 
         }

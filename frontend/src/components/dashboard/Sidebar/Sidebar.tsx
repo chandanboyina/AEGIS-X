@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import {
 
     DashboardOutlined,
@@ -26,11 +26,12 @@ import {
 
     RadarChartOutlined,
 
-    AreaChartOutlined
+    AreaChartOutlined,
+
+    PartitionOutlined
 
 } from "@ant-design/icons";
 
-import { useNavigate } from "react-router-dom";
 
 import "./Sidebar.css";
 
@@ -45,13 +46,16 @@ export default function Sidebar({
 }:Props){
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     return(
 
         <div
             style={{
-                height:"100%",
-                background:"#091523"
+                height: "100vh",
+                background: "#091523",
+                display: "flex",
+                flexDirection: "column"
             }}
         >
 
@@ -104,22 +108,18 @@ export default function Sidebar({
             </div>
 
         <Menu
-
             theme="dark"
-
             mode="inline"
-
             inlineCollapsed={collapsed}
-
-            defaultSelectedKeys={["/"]}
-
-            onClick={(item)=>navigate(item.key)}
-
+            selectedKeys={[location.pathname]}
+            onClick={(item) => navigate(item.key)}
             style={{
-                height:"calc(100vh - 70px)",
-                borderRight:0,
-                background:"#091523",
-                paddingTop:10
+                flex: 1,
+                overflowY: "auto",
+                overflowX: "hidden",
+                borderRight: 0,
+                background: "#091523",
+                paddingTop: 10
             }}
 
             items={[
@@ -359,7 +359,14 @@ export default function Sidebar({
 
                     label:"Audit"
 
-                }
+                },
+
+                {
+                    key:"/ai-pipeline",
+                    icon:<PartitionOutlined
+                    style={{fontSize:18}}/>,
+                    label:"AI Pipeline"
+                },
 
             ]}
         />

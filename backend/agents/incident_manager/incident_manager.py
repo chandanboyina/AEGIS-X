@@ -154,14 +154,30 @@ class IncidentManager:
         print(packet["oracle"]["category"])
         print()
 
-        if packet["oracle"]["category"] == "Normal":
+        print("\n========== ORACLE OUTPUT ==========")
+        print(packet["oracle"])
+        print("===================================\n")
+
+        print("\n========== OBSERVER OUTPUT ==========")
+        print(packet["observer"])
+        print("=====================================\n")
+ 
+        if (
+            packet["oracle"]["category"] == "Normal"
+            and
+            not packet["oracle"].get("requires_investigation", False)
+        ):
             print("RETURNING EARLY")
             return packet
 
         print("GOING TO SENTINEL")
 
         # Ignore benign events
-        if packet["oracle"]["category"] == "Normal":
+        if (
+            packet["oracle"]["category"] == "Normal"
+            and
+            not packet["oracle"].get("requires_investigation", False)
+        ):
 
             packet["completed"] = False
 

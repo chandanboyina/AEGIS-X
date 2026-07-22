@@ -27,6 +27,30 @@ class OracleDecision:
 
         if category == "Normal":
 
+            investigate = investigation.get(
+
+                "requires_investigation",
+
+                False
+
+            )
+
+            if investigate:
+
+                return {
+
+                    "priority": "P3",
+
+                    "status": "OPEN",
+
+                    "confidence": 85,
+
+                    "recommendation":
+
+                        "Behavioral anomaly detected. Escalate for investigation."
+
+                }
+
             return {
 
                 "priority": "P4",
@@ -36,6 +60,7 @@ class OracleDecision:
                 "confidence": 80,
 
                 "recommendation":
+
                     "Continue monitoring."
 
             }
@@ -119,6 +144,8 @@ class OracleDecision:
                     "Disconnect affected host and activate incident response."
 
             }
+        
+        
 
         return {
 

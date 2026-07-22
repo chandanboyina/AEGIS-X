@@ -12,6 +12,14 @@ class PlaybookExplainer:
 
         strategy = commander["strategic_analysis"]["recommended"]
 
+        if strategy is None:
+            return {
+                "summary": "No playbook was recommended.",
+                "reasoning": [
+                    "Predictive Intelligence did not return any candidate strategy."
+                ]
+            }
+
         return {
 
             "selected":

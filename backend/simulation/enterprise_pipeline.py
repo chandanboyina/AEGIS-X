@@ -1,15 +1,15 @@
 from datetime import datetime
-
+import time
 from ai.evidence.evidence_builder import EvidenceBuilder
 from ai.context.context_engine import ContextEngine
 from ai.behavior.feature_engine import FeatureEngine
-
+from core.websocket_manager import manager
 from simulation.enterprise_stream import EnterpriseEventStream
 from agents.observer.observer_agent import ObserverAgent
-
+import asyncio
 from simulation.enterprise_statistics import EnterpriseStatistics
 from agents.oracle.oracle_agent import OracleAgent
-
+from pprint import pprint
 from agents.ueba.ai_behavior_engine import AIBehaviorEngine
 
 from agents.correlation.enterprise_intelligence_builder import EnterpriseIntelligenceBuilder
@@ -55,7 +55,9 @@ class EnterprisePipeline:
     Cyber Evidence Packet
     """
 
-    def __init__(self):
+    def __init__(self, loop=None):
+
+        self.loop = loop
 
         # Event Stream
         self.stream = EnterpriseEventStream()
@@ -103,11 +105,33 @@ class EnterprisePipeline:
             event_data.pop("asset")
 
         # 2. Sequential Module Processing
+        self.send_stage("Evidence Builder", "running")
         packet = EvidenceBuilder.build(event_data, asset)
+        self.send_stage("Evidence Builder", "completed")
+        time.sleep(0.3)
+        
+        self.send_stage("Context Engine", "running")
         packet = ContextEngine.enrich(packet)
+        self.send_stage("Context Engine", "completed")
+        time.sleep(0.3)
+
+        self.send_stage("Feature Extraction", "running")
         packet = FeatureEngine.extract(packet)
+        self.send_stage("Feature Extraction", "completed")
+        time.sleep(0.3)
+
+        self.send_stage("Observer AI", "running")
         packet = self.observer.observe(packet)
+        #print("\n========== OBSERVER OUTPUT ==========")
+        #pprint(packet["observer"])
+        #print("=====================================\n")
+        self.send_stage("Observer AI", "completed")
+        time.sleep(0.3)
+
+        self.send_stage("Behaviour Engine", "running")
         packet["behavior"] = self.behavior.analyze(event, snapshot)
+        self.send_stage("Behaviour Engine", "completed")
+        time.sleep(0.3)
         
         # 3. Build Threat Correlation BEFORE passing to Incident Manager
         correlation_input = {
@@ -117,24 +141,65 @@ class EnterprisePipeline:
             "observer": {"confidence": packet["observer"]["confidence"]},
             "behavior": packet["behavior"]
         }
+
+        self.send_stage("Correlation Engine", "running")
         packet["correlation"] = self.correlation.build(
             threat=correlation_input, behavior=packet["behavior"],
             campaign={}, ueba={}, cyber_dna={}, business={}, enterprise={}
         ) or {"status": "none", "threat_level": "low"}
+        self.send_stage("Correlation Engine", "completed")
+        time.sleep(0.3)
 
         # 4. Invoke Incident Manager Lifecycle 
+        self.send_stage("Incident Manager", "running")
         packet = self.incident_manager.process(packet)
+        self.send_stage("Incident Manager", "completed")
+        time.sleep(0.3)
 
         # 5. Populate Complex Enterprise AI Engine Data Fields
         if packet.get("completed"):
-            packet["enterprise_ai"] = {
-                "brain": {
-                    "history": self.brain.attack_history(packet["asset"]["hostname"]),
-                    "similar": self.brain.find_similar(packet)
-                },
-                "cyber_dna": self.cyber_dna.build(packet),
-                "digital_twin": self.digital_twin.simulate(packet)
+            packet["enterprise_ai"] = {}
+
+            # -----------------------------------------
+            # Enterprise Brain
+            # -----------------------------------------
+            self.send_stage("Enterprise Brain", "running")
+
+            brain = {
+                "history": self.brain.attack_history(
+                    packet["asset"]["hostname"]
+                ),
+                "similar": self.brain.find_similar(packet)
             }
+
+            packet["enterprise_ai"]["brain"] = brain
+
+            self.send_stage("Enterprise Brain", "completed")
+            time.sleep(0.3)
+
+            # -----------------------------------------
+            # Cyber DNA
+            # -----------------------------------------
+            self.send_stage("Cyber DNA", "running")
+
+            cyber_dna = self.cyber_dna.build(packet)
+
+            packet["enterprise_ai"]["cyber_dna"] = cyber_dna
+
+            self.send_stage("Cyber DNA", "completed")
+            time.sleep(0.3)
+
+            # -----------------------------------------
+            # Digital Twin
+            # -----------------------------------------
+            self.send_stage("Digital Twin", "running")
+
+            digital_twin = self.digital_twin.simulate(packet)
+
+            packet["enterprise_ai"]["digital_twin"] = digital_twin
+            self.send_stage("Digital Twin", "completed")
+            time.sleep(0.3)
+
             packet["trace"] = ["Evidence", "Context", "Features", "Observer", "Behavior", "Correlation", "Incident Manager", "Oracle", "Sentinel", "Commander", "AI Council", "Enterprise Brain", "Cyber DNA", "Digital Twin"]
             packet["pipeline"] = {"name": "Enterprise AI Pipeline", "version": "AEGIS-X 1.0", "status": "Completed", "completed_at": datetime.now().isoformat(), "modules": packet["trace"]}
             packet["enterprise"] = {"pipeline": "AEGIS-X", "mode": "Live", "completed": True}
@@ -198,6 +263,11 @@ class EnterprisePipeline:
         # 7. Update Cache Engine Instance
         packet_cache.set(clean_purified_packet)
 
+        self.send_stage(
+            "Dashboard Updated",
+            "completed"
+        )
+
         return packet
     
     def run(self):
@@ -231,6 +301,11 @@ class EnterprisePipeline:
 
         events = self.stream.generate_stream()
 
+        print("\n========== GENERATED EVENTS ==========")
+        for i, event in enumerate(events, 1):
+            print(f"{i:02d}. {event['event_type']}")
+        print("======================================\n")
+
         snapshot = self.activity.build(events)
 
         for event in events:
@@ -246,4 +321,25 @@ class EnterprisePipeline:
 
         return self.statistics.summarize(
             packets
+        )
+    
+    def send_stage(self, stage, status):
+        print(stage, status)
+        if self.loop is None:
+            return
+
+        asyncio.run_coroutine_threadsafe(
+
+            manager.broadcast({
+
+                "type": "pipeline",
+
+                "stage": stage,
+
+                "status": status
+
+            }),
+
+            self.loop
+
         )

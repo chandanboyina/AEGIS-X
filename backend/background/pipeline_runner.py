@@ -1,39 +1,65 @@
 import asyncio
 import logging
 import traceback
+
 from simulation.enterprise_pipeline import EnterprisePipeline
 from core.packet_router import router
 
 # Configure logger
 logger = logging.getLogger("uvicorn")
 
+
 class PipelineRunner:
+
     def __init__(self):
-        self.pipeline = EnterprisePipeline()
+
+        self.pipeline = None
         self.main_loop = None
 
     async def start(self):
+
+        # Store FastAPI's main event loop
         self.main_loop = asyncio.get_running_loop()
+
+        # Create pipeline AFTER event loop is available
+        self.pipeline = EnterprisePipeline(
+            loop=self.main_loop
+        )
+
         logger.info("Pipeline Runner started.")
-        
-        # We try to run the pipeline once. If it crashes, it will log 
-        # the full traceback and the loop will end (no flooding).
+
         try:
+
             logger.info("Starting pipeline execution...")
-            await asyncio.to_thread(self._run_pipeline)
+
+            await asyncio.to_thread(
+                self._run_pipeline
+            )
+
         except Exception:
-            logger.critical("PIPELINE RUNNER CRITICAL ERROR - TERMINATING:")
+
+            logger.critical(
+                "PIPELINE RUNNER CRITICAL ERROR - TERMINATING:"
+            )
+
             traceback.print_exc()
-            # Loop stops here, preventing further logs
-        
+
     def _run_pipeline(self):
-        # This will execute the simulation
+
+        # Execute enterprise simulation
+
         for packet in self.pipeline.run_live():
+
             if self.main_loop:
+
                 asyncio.run_coroutine_threadsafe(
-                    router.publish(packet), 
+
+                    router.publish(packet),
+
                     self.main_loop
+
                 )
 
-# Initialize the runner
+
+# Singleton instance
 runner = PipelineRunner()
